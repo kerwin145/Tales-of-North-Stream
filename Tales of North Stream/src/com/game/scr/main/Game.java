@@ -51,18 +51,19 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	
 	long Ability1CDT = 10 * 60; //CDT = cool down time 
 	long Ability2CDT = 10 * 60;
-	long Ability2Duration = 10 * 60;
+	long Ability2Duration = 6 * 60;
 	
 	//these will be the abilities that you can choose from 
-	Ability Ability0_1 = new NoAbility(1, "NONE", false, 0, this, 0, 0);
-	Ability Ability0_2 = new NoAbility(2, "NONE", false, 0, this, 0, 0);
-	Ability Ability0_3 = new NoAbility(3, "NONE", false, 0, this, 0, 0);
-	Ability Ability1 = new Heal(0, "HEAL", false, 10000, this, Ability1CDT, 0);
-	Ability Ability2 = new Invincibility(0, "INVINCIBLE", false, 12500, this, Ability2CDT, Ability2Duration);
+	Ability Ability0 = new NoAbility(1, "NONE", false, 0, this, 0, 0);
+	Ability AbilityHeal = new Heal(0, "HEAL", false, 10000, this, Ability1CDT, 0);
+	Ability AbilityInvincibility = new Invincibility(0, "INVINCIBLE", false, 12500, this, Ability2CDT, Ability2Duration);
+		
+	Ability tempAbility = Ability0;
+	Ability AbilityONE = Ability0;
+	Ability AbilityTWO = Ability0;
+	Ability AbilityTHREE = Ability0;
 
 	
-	Ability[] Ability0 = {Ability0_1, Ability0_2, Ability0_3};
-
 	public ArrayList<Ability> Abilities;
 	
 	//these are the abilities that are assigned to your key slots
@@ -150,21 +151,17 @@ public class Game extends Canvas implements Runnable, MouseListener{
 		
 		reloadTime = p.getReloadTime();
 		
-		Ability0_1.setTexture(tex.NoAbilityIcon);
-		Ability0_2.setTexture(tex.NoAbilityIcon);
-		Ability0_3.setTexture(tex.NoAbilityIcon);
-		Ability1.setTexture(tex.HealIcon);
-		Ability2.setTexture(tex.InvincibilityIcon);
+		Ability0.setTexture(tex.NoAbilityIcon);
+		AbilityHeal.setTexture(tex.HealIcon);
+		AbilityInvincibility.setTexture(tex.InvincibilityIcon);
 		
 		Abilities = new ArrayList<Ability>();
-		Abilities.add(Ability0_1);
-		Abilities.add(Ability0_2);
-		Abilities.add(Ability0_3);
-		Abilities.add(Ability1); 
-		Abilities.add(Ability2); 
+		Abilities.add(Ability0);
+		Abilities.add(AbilityHeal); 
+		Abilities.add(AbilityInvincibility); 
 
 	}
-	
+
 	private synchronized void start() {
 		if(running)
 			return;
@@ -243,10 +240,9 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	
 			p.tick();
 			c.tick();
-			retrieveAbilityWithIDNum(1).tick();
-			retrieveAbilityWithIDNum(2).tick();
-			retrieveAbilityWithIDNum(3).tick();
-			
+			AbilityONE.tick();
+			AbilityTWO.tick();
+			AbilityTHREE.tick();			
 			//System.out.println("READIES + " + AbilityONE.getReady() + AbilityTWO.getReady() + AbilityTHREE.getReady());
 			
 			if (HEALTH <= 0) {
@@ -421,16 +417,16 @@ public class Game extends Canvas implements Runnable, MouseListener{
 			if((my >= 430) && (my <= 450)) {
 				//if
 				if((mx >= 20) && (mx <= 120)){
-					if (galaxyBux >= Ability1.getCost() && !Ability1.getBought()) {
-						galaxyBux -= Ability1.getCost();
-						Ability1.setBought(true);
+					if (galaxyBux >= AbilityHeal.getCost() && !AbilityHeal.getBought()) {
+						galaxyBux -= AbilityHeal.getCost();
+						AbilityHeal.setBought(true);
 					}
 				}
 				
 				if((mx >= 200) && (mx <= 300)){
-					if (galaxyBux >= Ability2.getCost() && !Ability2.getBought()) {
-						galaxyBux -= Ability2.getCost();
-						Ability2.setBought(true);
+					if (galaxyBux >= AbilityInvincibility.getCost() && !AbilityInvincibility.getBought()) {
+						galaxyBux -= AbilityInvincibility.getCost();
+						AbilityInvincibility.setBought(true);
 					}
 				}
 
@@ -444,15 +440,14 @@ public class Game extends Canvas implements Runnable, MouseListener{
 				//heal (Ability1)
 				if((mx >= 20) && (mx <= 90)){
 					
-					if (Ability1.getBought()) {
-						if(!Ability1.isEquipped()) {
+					if (AbilityHeal.getBought()) {
+						if(!AbilityHeal.isEquipped()) {
 							equipSelected = true;
-							selectONLYAbility(Ability1);
+							tempAbility = AbilityHeal;
 						}
-						else if (Ability1.isEquipped()){
-							Ability1.setEquipped(false);
-							Ability0[Ability1.getId() - 1].setId(Ability1.getId()); 
-							Ability1.setId(0);
+						else if (AbilityHeal.isEquipped()){
+							AbilityHeal.setEquipped(false);
+							AbilityHeal.setId(0);
 						}
 					}
 						
@@ -460,15 +455,14 @@ public class Game extends Canvas implements Runnable, MouseListener{
 				
 				if((mx >= 200) && (mx <= 270)){
 					
-					if (Ability2.getBought()) {
-						if(!Ability2.isEquipped()) {
+					if (AbilityInvincibility.getBought()) {
+						if(!AbilityInvincibility.isEquipped()) {
 							equipSelected = true;
-							selectONLYAbility(Ability2);
+							tempAbility = AbilityInvincibility;
 						}
-						else if (Ability2.isEquipped()){
-							Ability2.setEquipped(false);
-							Ability0[Ability2.getId() - 1].setId(Ability2.getId()); 
-							Ability2.setId(0);
+						else if (AbilityInvincibility.isEquipped()){
+							AbilityInvincibility.setEquipped(false);
+							AbilityInvincibility.setId(0);
 						}
 					}
 						
@@ -481,38 +475,46 @@ public class Game extends Canvas implements Runnable, MouseListener{
 			if ((my >= 570) && (my <= 610)) {
 				//ability 1
 				if ((mx >= 20) && (mx <= 120)) {
-					if((equipSelected)&&(!getAbilityInSlot(1).isEquipped())){ //if you clicked the equip button, and the ability is not equipped
-						assignId(1);
-						}
+					if((equipSelected)&&(!AbilityONE.isEquipped())){ //if you clicked the equip button, and the ability is not equipped
+						tempAbility.setEquipped(true);
+						AbilityONE = tempAbility;
+					}
 					else {
-						assignAbilityInSlotTo0(1);
+						AbilityONE.setEquipped(false);
+						AbilityONE = Ability0;
 					}
 					
 					equipSelected = false;
-					System.out.println("Aility equipped in slot one is " + getAbilityInSlot(1).isEquipped()); //Debug
+					System.out.println("Aility equipped in slot one is " + AbilityONE.isEquipped()); //Debug
 				}
 				//ability 2
 				if ((mx >= 140) && (mx <= 240)) {
 					//equip  
-					if((equipSelected)&&(!getAbilityInSlot(2).isEquipped())){
-						assignId(2);
+					if((equipSelected)&&(!AbilityTWO.isEquipped())){ //if you clicked the equip button, and the ability is not equipped
+						tempAbility.setEquipped(true);
+						AbilityTWO = tempAbility;
 					}
 					else {
-						assignAbilityInSlotTo0(2);
+						AbilityTWO.setEquipped(false);
+						AbilityTWO = Ability0;
 					}
-					equipSelected = false;
-					System.out.println("Aility equipped in slot two is " + getAbilityInSlot(2).isEquipped()); //Debug
-				}
+					System.out.println("Aility equipped in slot two is " + AbilityTWO.isEquipped()); //Debug
+					equipSelected = false;						}
+
+				
 				//ability 3
 				if ((mx >= 260) && (mx <= 360)) {
-					if((equipSelected)&&(!getAbilityInSlot(3).isEquipped())){
-						assignId(3);
+					if((equipSelected)&&(!AbilityTHREE.isEquipped())){ //if you clicked the equip button, and the ability is not equipped
+						tempAbility.setEquipped(true);
+						AbilityTHREE = tempAbility;
 					}
 					else {
-						assignAbilityInSlotTo0(3);
-					}					
+						AbilityTHREE.setEquipped(false);
+						AbilityTHREE = Ability0;
+					}
+					
 					equipSelected = false;
-					System.out.println("Aility equipped in slot three is " + getAbilityInSlot(3).isEquipped()); //Debug
+					System.out.println("Aility equipped in slot three is " + AbilityTHREE.isEquipped()); //Debug
 				}
 	
 			}
@@ -546,9 +548,10 @@ public class Game extends Canvas implements Runnable, MouseListener{
 			gameSummary = false;
 			GAMEOVER = false;
 			
-			retrieveAbilityWithIDNum(1).prepareCooldowns(tickNumber);
-			retrieveAbilityWithIDNum(2).prepareCooldowns(tickNumber);
-			retrieveAbilityWithIDNum(3).prepareCooldowns(tickNumber);
+			AbilityONE.prepareCooldowns(tickNumber);
+			AbilityTWO.prepareCooldowns(tickNumber);
+			AbilityTHREE.prepareCooldowns(tickNumber);
+
 
 		}
 		
@@ -631,6 +634,11 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	public ArrayList<Ability> getAbilities() {return Abilities;}
 		
 	public long getTickNumber() {return tickNumber;	}
+	
+	public Ability getAbilityONE() {return AbilityONE;}
+	public Ability getAbilityTWO() {return AbilityTWO;}
+	public Ability getAbilityTHREE() {return AbilityTHREE;}
+
 		
 //Arggh i couldn't figure out how to get this to work in the controller...so i guess its now going into the main smh.
 	public void shootBullet() {
@@ -649,60 +657,7 @@ public class Game extends Canvas implements Runnable, MouseListener{
 		
 	}	
 	
-	public void selectONLYAbility(Ability ability){
-		//unselect everything else, then change your current ability to selected = true; 
-		for(int i = 0; i < Abilities.size(); i++)
-			Abilities.get(i).setSelected(false);
-		
-		ability.setSelected(true);
-	}
 	
-	public void assignId(int ID) {
-		for (int i = 0; i < Abilities.size(); i++) {
-			if (Abilities.get(i).getId() == ID) {
-				Abilities.get(i).setId(0);//change the ability currently in that slot to 0. 
-			}
-			
-			if (Abilities.get(i).getSelected() == true) {
-				Abilities.get(i).setId(ID);
-				Abilities.get(i).setEquipped(true);
-			}
-		}//for loop
-		
-		for(int i = 0; i < Abilities.size(); i++) 
-			Abilities.get(i).setSelected(false);//deselect everything
-		
-	}
-	
-	public Ability getAbilityInSlot(int ID) {
-		for (int i = 0; i < Abilities.size(); i++) {
-			if (Abilities.get(i).getId() == ID)
-				return Abilities.get(i);
-		}
-		return Ability0_1;
-	}
-	
-	public void assignAbilityInSlotTo0(int slot) {	
-		for (int i = 0; i < Abilities.size(); i++) { 
-			 if(Abilities.get(i).getId() == slot) {
-				Ability0[Abilities.get(i).getId() - 1].setId(Abilities.get(i).getId());
-				Abilities.get(i).setId(0);
-				Abilities.get(i).setEquipped(false);
-			}
-			 
-		}//for loop
-
-	}
-	
-	public Ability retrieveAbilityWithIDNum(int AbilityNumber) {
-		for(int i = 0; i < Abilities.size(); i++) {
-			if(Abilities.get(i).getId() == AbilityNumber)
-				return Abilities.get(i);
-		}
-		
-		return Ability0_1;//technically should never happen. 
-	}
-
 
 ////////
 	public void help(Graphics g) {

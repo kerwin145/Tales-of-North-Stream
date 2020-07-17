@@ -50,9 +50,9 @@ public class UpgradeMenu {
 	
 
 	public void tick() {
-		ability1Text = game.retrieveAbilityWithIDNum(1).getAbilityText();
-		ability2Text = game.retrieveAbilityWithIDNum(2).getAbilityText();
-		ability3Text = game.retrieveAbilityWithIDNum(3).getAbilityText();
+		ability1Text = game.getAbilityONE().getAbilityText();
+		ability2Text = game.getAbilityTWO().getAbilityText();
+		ability3Text = game.getAbilityTHREE().getAbilityText();
 		
 	}
 	
@@ -166,12 +166,12 @@ public class UpgradeMenu {
 		g.setColor(Color.white);	
 		g.setFont(fnt1);
 		
-		if (game.getAbilities().get(3).getBought()) {
+		if (game.getAbilities().get(1).getBought()) {
 			g2d.drawString("  BOUGHT  ", buyHeal.x + 5, buyHeal.y + 15);
 			g.setColor(Color.green);
 		}
 		else {
-			g2d.drawString("Buy: $" + game.getAbilities().get(3).getCost(), buyHeal.x + 5, buyHeal.y + 15);
+			g2d.drawString("Buy: $" + game.getAbilities().get(1).getCost(), buyHeal.x + 5, buyHeal.y + 15);
 			g.setColor(Color.red);
 		}
 		
@@ -179,11 +179,11 @@ public class UpgradeMenu {
 		
 		g.drawString("TBD UPGRADE", upgradeHeal1.x + 5, upgradeHeal1.y + 15);
 		
-		if (!game.getAbilities().get(3).getBought()){
+		if (!game.getAbilities().get(1).getBought()){
 			g.setColor(Color.red); 
 			g.drawString("Equip", equipHeal.x + 5, equipHeal.y + 15);
 		}
-		else if (game.getAbilities().get(3).isEquipped()) {
+		else if (game.getAbilities().get(1).isEquipped()) {
 			g.setColor(Color.red); 
 			g.drawString("Unequip", equipHeal.x + 5, equipHeal.y + 15);
 		}
@@ -199,12 +199,12 @@ public class UpgradeMenu {
 		g.setColor(Color.white);	
 		g.setFont(fnt1);
 		
-		if (game.getAbilities().get(4).getBought()) {
+		if (game.getAbilities().get(2).getBought()) {
 			g2d.drawString("  BOUGHT  ", buyInvincibility.x + 5, buyHeal.y + 15);
 			g.setColor(Color.green);
 		}
 		else {
-			g2d.drawString("Buy: $" + game.getAbilities().get(4).getCost(), buyInvincibility.x + 5, buyInvincibility.y + 15);
+			g2d.drawString("Buy: $" + game.getAbilities().get(2).getCost(), buyInvincibility.x + 5, buyInvincibility.y + 15);
 			g.setColor(Color.red);
 		}
 		
@@ -212,11 +212,11 @@ public class UpgradeMenu {
 		
 		g.drawString("TBD UPGRADE", upgradeInvincibility1.x + 5, upgradeInvincibility1.y + 15);
 		
-		if (!game.getAbilities().get(4).getBought()){
+		if (!game.getAbilities().get(2).getBought()){
 			g.setColor(Color.red); 
 			g.drawString("Equip", equipInvincibility.x + 5, equipInvincibility.y + 15);
 		}
-		else if (game.getAbilities().get(4).isEquipped()) {
+		else if (game.getAbilities().get(2).isEquipped()) {
 			g.setColor(Color.red); 
 			g.drawString("Unequip", equipInvincibility.x + 5, equipInvincibility.y + 15);
 		}

@@ -27,27 +27,47 @@ public class InformationPanel {
 		//ability display
 		Graphics2D g2d = (Graphics2D)g;
 		
-	//Ability information
-		if (game.retrieveAbilityWithIDNum(1).getReady())
+	//Ability information:
+		//box 1
+		if (game.getAbilityONE().getReady())
 			g.setColor(Color.green);
-		else if ((game.retrieveAbilityWithIDNum(1).getActiveFor() < game.retrieveAbilityWithIDNum(1).getDuration()) && (game.retrieveAbilityWithIDNum(1).getTimesUsed() != 0))
-			g.setColor(Color.white);
+		else if (game.getAbilityONE().getTimesUsed() != 0) {
+			if (game.getAbilityONE().getActiveFor() + 180 < game.getAbilityONE().getDuration())
+				g.setColor(Color.white);
+			else if (game.getAbilityONE().getActiveFor() + 120 < game.getAbilityONE().getDuration())
+				g.setColor(Color.yellow);
+			else if (game.getAbilityONE().getActiveFor() + 60 < game.getAbilityONE().getDuration())
+				g.setColor(Color.orange);
+		}
 		else
 			g.setColor(Color.red);
 		g2d.draw(abilityONEBox);
 		
-		if (game.retrieveAbilityWithIDNum(2).getReady())
+		//box 2
+		if (game.getAbilityTWO().getReady())
 			g.setColor(Color.green);
-		else if ((game.retrieveAbilityWithIDNum(2).getActiveFor() < game.retrieveAbilityWithIDNum(2).getDuration()) && (game.retrieveAbilityWithIDNum(2).getTimesUsed() != 0))
-			g.setColor(Color.white);
+		else if (game.getAbilityTWO().getTimesUsed() != 0) {
+			if (game.getAbilityTWO().getActiveFor() + 180 < game.getAbilityTWO().getDuration())
+				g.setColor(Color.white);
+			else if (game.getAbilityTWO().getActiveFor() + 120 < game.getAbilityTWO().getDuration())
+				g.setColor(Color.yellow);
+			else if (game.getAbilityTWO().getActiveFor() + 60 < game.getAbilityTWO().getDuration())
+				g.setColor(Color.orange);
+		}
 		else
 			g.setColor(Color.red);
 		g2d.draw(abilityTWOBox);
 		
-		if (game.retrieveAbilityWithIDNum(3).getReady())
+		if (game.getAbilityTHREE().getReady())
 			g.setColor(Color.green);
-		else if ((game.retrieveAbilityWithIDNum(3).getActiveFor() < game.retrieveAbilityWithIDNum(3).getDuration()) && (game.retrieveAbilityWithIDNum(3).getTimesUsed() != 0))
-			g.setColor(Color.white);
+		else if (game.getAbilityTHREE().getTimesUsed() != 0) {
+			if (game.getAbilityTHREE().getActiveFor() + 180 < game.getAbilityTHREE().getDuration())
+				g.setColor(Color.white);
+			else if (game.getAbilityTHREE().getActiveFor() + 120 < game.getAbilityTHREE().getDuration())
+				g.setColor(Color.yellow);
+			else if (game.getAbilityTHREE().getActiveFor() + 60 < game.getAbilityTHREE().getDuration())
+				g.setColor(Color.orange);
+		}
 		else
 			g.setColor(Color.red);	
 		g2d.draw(abilityTHREEBox);
@@ -60,17 +80,17 @@ public class InformationPanel {
 		g.drawString("Ability1", abilityONEBox.x + 5, abilityONEBox.y - 5);
 		g.drawString("Ability2", abilityTWOBox.x + 5, abilityTWOBox.y - 5);
 		g.drawString("Ability3", abilityTHREEBox.x + 5, abilityTHREEBox.y - 5);
-		g.drawImage(game.retrieveAbilityWithIDNum(1).getTexture(), abilityONEBox.x + 5, abilityONEBox.y + 5, null);
-		g.drawImage(game.retrieveAbilityWithIDNum(2).getTexture(), abilityTWOBox.x + 5, abilityTWOBox.y + 5, null);
-		g.drawImage(game.retrieveAbilityWithIDNum(3).getTexture(), abilityTHREEBox.x + 5, abilityTHREEBox.y + 5, null);
+		g.drawImage(game.getAbilityONE().getTexture(), abilityONEBox.x + 5, abilityONEBox.y + 5, null);
+		g.drawImage(game.getAbilityTWO().getTexture(), abilityTWOBox.x + 5, abilityTWOBox.y + 5, null);
+		g.drawImage(game.getAbilityTHREE().getTexture(), abilityTHREEBox.x + 5, abilityTHREEBox.y + 5, null);
 		
-		g.drawString(game.retrieveAbilityWithIDNum(1).getAbilityText(), abilityONEBox.x + 40, abilityONEBox.y + 15);
-		g.drawString(game.retrieveAbilityWithIDNum(2).getAbilityText(), abilityTWOBox.x + 40, abilityTWOBox.y + 15);
-		g.drawString(game.retrieveAbilityWithIDNum(3).getAbilityText(), abilityTHREEBox.x + 40, abilityTHREEBox.y + 15);
+		g.drawString(game.getAbilityONE().getAbilityText(), abilityONEBox.x + 40, abilityONEBox.y + 15);
+		g.drawString(game.getAbilityTWO().getAbilityText(), abilityTWOBox.x + 40, abilityTWOBox.y + 15);
+		g.drawString(game.getAbilityTHREE().getAbilityText(), abilityTHREEBox.x + 40, abilityTHREEBox.y + 15);
 		
-		g.drawString(""+ game.retrieveAbilityWithIDNum(1).coolDown(), abilityONEBox.x + 40, abilityONEBox.y + 30);
-		g.drawString(""+ game.retrieveAbilityWithIDNum(2).coolDown(), abilityTWOBox.x + 40, abilityTWOBox.y + 30);
-		g.drawString(""+ game.retrieveAbilityWithIDNum(3).coolDown(), abilityTHREEBox.x + 40, abilityTHREEBox.y + 30);
+		g.drawString(""+ game.getAbilityONE().coolDown(), abilityONEBox.x + 40, abilityONEBox.y + 30);
+		g.drawString(""+ game.getAbilityTWO().coolDown(), abilityTWOBox.x + 40, abilityTWOBox.y + 30);
+		g.drawString(""+ game.getAbilityTHREE().coolDown(), abilityTHREEBox.x + 40, abilityTHREEBox.y + 30);
 
 		
 		//health bar stuff

@@ -45,6 +45,7 @@ public class Invincibility extends Ability{
 		else 
 			ready = false;
 		
+		
 		if(activeFor < duration)
 			game.damageRecieved = 0;
 		
@@ -59,6 +60,7 @@ public class Invincibility extends Ability{
 	public void prepareCooldowns(long currentTick) {
 		lastUse = currentTick;
 		now = currentTick;
+		activeFor = duration;
 	}
 	
 	public String coolDown() {

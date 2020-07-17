@@ -127,7 +127,7 @@ public class KeyInput extends KeyAdapter{
 			//abilities
 				else if (key ==KeyEvent.VK_1) {
 					//if (game.getAbilityONE().getReady()) {
-						game.retrieveAbilityWithIDNum(1).execute();
+						game.AbilityONE.execute();
 						//game.getAbilityONE().setReady(false);
 					//}
 
@@ -135,7 +135,7 @@ public class KeyInput extends KeyAdapter{
 				
 				else if (key ==KeyEvent.VK_2) {
 					//if (game.getAbilityTWO().getReady()) {
-						game.retrieveAbilityWithIDNum(2).execute();
+						game.AbilityTWO.execute();
 						//game.getAbilityTWO().setReady(false);
 					//}
 
@@ -143,7 +143,7 @@ public class KeyInput extends KeyAdapter{
 				
 				else if (key ==KeyEvent.VK_3) {
 					//if (game.getAbilityTHREE().getReady()) {
-						game.retrieveAbilityWithIDNum(3).execute();
+						game.AbilityTHREE.execute();
 						//game.getAbilityTHREE().setReady(false);
 					//}
 					

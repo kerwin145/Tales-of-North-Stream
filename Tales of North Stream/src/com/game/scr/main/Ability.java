@@ -80,6 +80,7 @@ public abstract class Ability {
 	public void prepareCooldowns(long currentTick) {
 		lastUse = currentTick;
 		now = currentTick;
+		activeFor = duration;
 	}
 	
 	public String coolDown() {
