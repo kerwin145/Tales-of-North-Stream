@@ -1,5 +1,6 @@
 package com.game.scr.main;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public abstract class Ability {
@@ -22,7 +23,11 @@ public abstract class Ability {
 	long duration = 0;
 	int timesUsed = 0;
 	
-	public Ability(int id, String AbilityText, boolean equipped, int cost, Game game, long coolDownTime, long duration) {
+	int level = 0;
+	int maxLevel;
+	int upgradeCost;
+	
+	public Ability(int id, String AbilityText, boolean equipped, int cost, Game game, long coolDownTime, long duration, int maxLevel, int upgradeCost) {
 		this.id = id;
 		this.AbilityText = AbilityText;
 		this.equipped = equipped;
@@ -30,10 +35,13 @@ public abstract class Ability {
 		this.game = game;
 		this.coolDownTime = coolDownTime;
 		this.duration = duration;
+		this.maxLevel = maxLevel;
+		this.upgradeCost = upgradeCost;
 	}
 	
 	public abstract void execute();
 	public abstract void tick();
+	public abstract void render(Graphics g);
 	
 	public BufferedImage getTexture() {
 		return texture;
@@ -76,6 +84,13 @@ public abstract class Ability {
 	public long getActiveFor() {return activeFor;}
 	
 	public int getTimesUsed() {return timesUsed;}
+	
+	public int getMaxLevel() {return maxLevel;}
+	public int getLevel() {return level;}
+	public void setLevel(int level) {this.level = level;}
+	
+	public int getUpgradeCost() {return upgradeCost;}
+	public void setUpgradeCost(int x) {this.upgradeCost = x;}
 
 	public void prepareCooldowns(long currentTick) {
 		lastUse = currentTick;
@@ -91,17 +106,16 @@ public abstract class Ability {
 	}
 	//YOU CAN ONLY EQUIP THREE ABILITIES. Duration will be in TICKS. 
 	
-	//no reload time. Upgrade: Duration, cool down time (Separate)
-	
+	//no reload time. Upgrade: Duration, cool down time  DONE
 
-	//all direction bullets. Upgrade: Duration, cool down time (Separate)
+	//all direction bullets. Upgrade: Duration, cool down time DONE
 	
 	//shock waves (percentage of enemies defeated). Upgrade: percentage
 	
-	//infinite pierce. Upgrade: Duration
+	//infinite pierce. Upgrade: Duration DONE
 	
-	//heal. Upgrade: Amount Healed 
+	//heal. Upgrade: Amount Healed DONE
 	
-	//Invincibility. Upgrade: Duration, Cooldown (Separate)
+	//Invincibility. Upgrade: Duration, Cooldown (Separate) DONE
 
 }

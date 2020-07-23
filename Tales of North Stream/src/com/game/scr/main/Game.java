@@ -1,4 +1,3 @@
-//uhh okay. I could have put the help and game summary into another class but come on man don't do that to me.... :)
 
 package com.game.scr.main;
 
@@ -45,31 +44,39 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	private UpgradeMenu um;
 	private Transaction trans;
 	private Random r = new Random();
+	private KeyInput key = new KeyInput(this);
 	
 	public LinkedList<Friend> Friends;
 	public LinkedList<Foe> Foes;
 	
-	long Ability1CDT = 10 * 60; //CDT = cool down time 
-	long Ability2CDT = 10 * 60;
-	long Ability2Duration = 6 * 60;
-	
+	static long AbilityHealCDT = 2 * 60; //CDT = cool down time 
+	static long AbilityInvincibilityCDT = 25 * 60, AbilityInvincibilityDuration = 5 * 60;
+	static long AbilityInfinitePiercCDT = 20 * 60, AbilityInfinitePierceDuration = 4 * 60;
+	static long AbilityOmniFireballCDT = 20 * 60, AbilityOmniFireballDuration = 3 * 60;
+	static long AbilityInstaReloadCDT = 18 * 60, AbilityInstaReloadDuration = 4 * 60;
+	static long AbilityShockwaveCDT = 25 * 60;
+
+	private int reloadTime = 300;  //will be set after the player object has been created. 
+
 	//these will be the abilities that you can choose from 
-	Ability Ability0 = new NoAbility(1, "NONE", false, 0, this, 0, 0);
-	Ability AbilityHeal = new Heal(0, "HEAL", false, 10000, this, Ability1CDT, 0);
-	Ability AbilityInvincibility = new Invincibility(0, "INVINCIBLE", false, 12500, this, Ability2CDT, Ability2Duration);
-		
+	//the ability constructor: 	
+	//public Ability(int id, String AbilityText, boolean equipped, int cost, Game game, long coolDownTime, long duration, int maxLevel, int upgradeCost) {
+	NoAbility Ability0 = new NoAbility(1, "NONE", false, 0, this, 0, 0, 0, 0);
+	Heal AbilityHeal = new Heal(0, "HEAL", false, 10000, this, AbilityHealCDT, 0, 5, 8000);
+	Invincibility AbilityInvincibility = new Invincibility(0, "INVINCIBLE", false, 12500, this, AbilityInvincibilityCDT, AbilityInvincibilityDuration, 6, 12000);
+	InfinitePierce AbilityInfinitePierce = new InfinitePierce(0, Character.toString('\u221E') + " PIERCE", false, 15000, this, AbilityInfinitePiercCDT, AbilityInfinitePierceDuration, 6, 8000);	
+	OmniFireball AbilityOmniFireball = new OmniFireball(0, "OMNI-FB", false, 15000, this, AbilityOmniFireballCDT, AbilityOmniFireballDuration, 5, 10000);
+	InstaReload AbilityInstaReload = new InstaReload(0, "INSTA-RD", false, 18000, this, AbilityInstaReloadCDT, AbilityInstaReloadDuration, 4, 12000);
+	Shockwave AbilityShockwave = new Shockwave(0, "SHOCKWAVE", false, 25000, this, AbilityShockwaveCDT, 0, 4, 30000);
+	
 	Ability tempAbility = Ability0;
 	Ability AbilityONE = Ability0;
 	Ability AbilityTWO = Ability0;
 	Ability AbilityTHREE = Ability0;
 
-	
-	public ArrayList<Ability> Abilities;
-	
-	//these are the abilities that are assigned to your key slots
-	//Ability AbilityONE = Ability0;
-	//Ability AbilityTWO = Ability0;
-	//Ability AbilityTHREE = Ability0;
+	//public ArrayList<Ability> Abilities;
+	private boolean instaReload = false;
+	private boolean doShockwave = false; //i shouldn't really do this, but putting the code in shockwave execute is leading to null pointers...idk y 
 	
 	private boolean equipSelected = false;
 	//private Ability tempEquip = Ability0;
@@ -97,14 +104,14 @@ public class Game extends Canvas implements Runnable, MouseListener{
 //upgrades
 	int fireballSpeedModifier = 0; //bullets will travel faster if player is moving
 	private boolean reloadReady = false;
-	private int reloadTime;  //will be set after the player object has been created. 
+	private boolean omniDirection = false;
 	
 	public static int MAXHEALTH = 15;
 	public static int HEALTH = 15;//MAXHEALTH;
 	public static int damageRecieved = 1;
 	
-	public int pierce = 1;;
-	
+	private int pierce = 1;;
+		
 //information panel
 	public static int round = 1;
 	private int score = 0;
@@ -133,7 +140,7 @@ public class Game extends Canvas implements Runnable, MouseListener{
 			e.printStackTrace();
 		}
 		 
-		this.addKeyListener(new KeyInput(this));
+		this.addKeyListener(key);
 		this.addMouseListener(this);
 		
 		tex = new Textures(this);
@@ -148,17 +155,14 @@ public class Game extends Canvas implements Runnable, MouseListener{
 		iPanel = new InformationPanel(this);
 		um = new UpgradeMenu(this, p);
 		trans = new Transaction(this, p);
-		
-		reloadTime = p.getReloadTime();
-		
+				
 		Ability0.setTexture(tex.NoAbilityIcon);
 		AbilityHeal.setTexture(tex.HealIcon);
 		AbilityInvincibility.setTexture(tex.InvincibilityIcon);
-		
-		Abilities = new ArrayList<Ability>();
-		Abilities.add(Ability0);
-		Abilities.add(AbilityHeal); 
-		Abilities.add(AbilityInvincibility); 
+		AbilityInfinitePierce.setTexture(tex.InfinitePierceIcon);
+		AbilityOmniFireball.setTexture(tex.OmniFireballIcon);
+		AbilityInstaReload.setTexture(tex.InstaReloadIcon);
+		AbilityShockwave.setTexture(tex.ShockwaveIcon);
 
 	}
 
@@ -221,12 +225,14 @@ public class Game extends Canvas implements Runnable, MouseListener{
 				updates = 0;
 				frames = 0;
 			}
-		
-			if (System.currentTimeMillis() - fireBallCoolDownTimer > p.getReloadTime()) {
-				fireBallCoolDownTimer += p.getReloadTime();
+		if(!instaReload) {
+			if (System.currentTimeMillis() - fireBallCoolDownTimer > reloadTime) {
+				fireBallCoolDownTimer += reloadTime;
 				reloadReady = true;
 			}
-		
+		}
+		else
+			reloadReady = true;
 			
 		}//end running
 		
@@ -240,6 +246,7 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	
 			p.tick();
 			c.tick();
+			
 			AbilityONE.tick();
 			AbilityTWO.tick();
 			AbilityTHREE.tick();			
@@ -260,19 +267,21 @@ public class Game extends Canvas implements Runnable, MouseListener{
 			
 			if ((Foes.size() == 0) && (!(round == 1)))
 				startRound();
+			/*
+			if(doShockwave) {	
+				for (int i = 0; i < Foes.size(); i++){
+					Foe tempEnemy =  Foes.get(i);
+					//formula is (rad ((x1-x2)squared + (y1 - y2)squared)
+					int distance = (int) Math.pow((Math.pow(p.getX()-tempEnemy.getX(), 2) + Math.pow(p.getY()-tempEnemy.getY(), 2)), 0.5);
+					int num = r.nextInt((int)Math.pow(distance, 0.5)/(4 + AbilityShockwave.getLevel()));
+					if(num == 0) //this is the chance 
+						 Foes.remove(tempEnemy);
+						//i know this will cuase the next enemy to be skipped, but that's intentional cuz i'm too lazy to make it not :)
+				}
+				doShockwave = false;
+			}
+			*/
 			
-			for (int i = 0; i < Abilities.size(); i++)
-				if (Abilities.get(i).getId() == 1)
-					Abilities.get(i).tick();
-			
-			for (int i = 0; i < Abilities.size(); i++)
-				if (Abilities.get(i).getId() == 2)
-					Abilities.get(i).tick();
-			
-			for (int i = 0; i < Abilities.size(); i++)
-				if (Abilities.get(i).getId() == 3)
-					Abilities.get(i).tick();
-		
 		}
 		
 		if(State == STATE.UPGRADE) {
@@ -305,6 +314,10 @@ public class Game extends Canvas implements Runnable, MouseListener{
 			c.render(g);
 			igm.render(g);
 			iPanel.render(g);
+			
+			AbilityONE.render(g);
+			AbilityTWO.render(g);
+			AbilityTHREE.render(g);
 		}
 		
 		else if(State == STATE.MENU) {
@@ -416,23 +429,67 @@ public class Game extends Canvas implements Runnable, MouseListener{
 			//row of buy buttons
 			if((my >= 430) && (my <= 450)) {
 				//if
-				if((mx >= 20) && (mx <= 120)){
+				if((mx >= 20) && (mx <= 150)){
 					if (galaxyBux >= AbilityHeal.getCost() && !AbilityHeal.getBought()) {
 						galaxyBux -= AbilityHeal.getCost();
 						AbilityHeal.setBought(true);
+						AbilityHeal.setLevel(1);
 					}
+					else 
+						trans.purchaseAbilityHealthAmountUpgrade();					
+
 				}
 				
-				if((mx >= 200) && (mx <= 300)){
+				if((mx >= 200) && (mx <= 330)){
 					if (galaxyBux >= AbilityInvincibility.getCost() && !AbilityInvincibility.getBought()) {
 						galaxyBux -= AbilityInvincibility.getCost();
 						AbilityInvincibility.setBought(true);
+						AbilityInvincibility.setLevel(1);
 					}
+					else 
+						trans.purchaseInvincibilityCoolDownUpgrade();
 				}
-
+				
+				if((mx >= 380) && (mx <= 510)){
+					if (galaxyBux >= AbilityInfinitePierce.getCost() && !AbilityInfinitePierce.getBought()) {
+						galaxyBux -= AbilityInfinitePierce.getCost();
+						AbilityInfinitePierce.setBought(true);
+						AbilityInfinitePierce.setLevel(1);
+					}
+					else 
+						trans.purchaseInfinitePierceUpgrade();
+				}
+				
+				if((mx >= 560) && (mx <= 690)){
+					if (galaxyBux >= AbilityOmniFireball.getCost() && !AbilityOmniFireball.getBought()) {
+						galaxyBux -= AbilityOmniFireball.getCost();
+						AbilityOmniFireball.setBought(true);
+						AbilityOmniFireball.setLevel(1);
+					}
+					else 
+						trans.purchaseOmniFireballUpgrade();
+				}
+				
+				if((mx >= 740) && (mx <= 870)){
+					if (galaxyBux >= AbilityInstaReload.getCost() && !AbilityInstaReload.getBought()) {
+						galaxyBux -= AbilityInstaReload.getCost();
+						AbilityInstaReload.setBought(true);
+						AbilityInstaReload.setLevel(1);
+					}
+					else 
+						trans.purchaseInstaFireballUpgrade();;	
+				}
+				
+				if((mx >= 920) && (mx <= 1050)){
+					if (galaxyBux >= AbilityShockwave.getCost() && !AbilityShockwave.getBought()) {
+						galaxyBux -= AbilityShockwave.getCost();
+						AbilityShockwave.setBought(true);
+						AbilityShockwave.setLevel(1);
+					}
+					else 
+						trans.purchaseShockwaveUpgrade();	
+				}
 			}
-			
-			//row of upgrade buttons
 			
 			//row of equip buttons. 
 			if((my >= 490) && (my <= 510)) {				
@@ -468,8 +525,67 @@ public class Game extends Canvas implements Runnable, MouseListener{
 						
 				}
 
-				//next ability lol
-			}
+				if((mx >= 380) && (mx <= 450)){
+					
+					if (AbilityInfinitePierce.getBought()) {
+						if(!AbilityInfinitePierce.isEquipped()) {
+							equipSelected = true;
+							tempAbility = AbilityInfinitePierce;
+						}
+						else if (AbilityInfinitePierce.isEquipped()){
+							AbilityInfinitePierce.setEquipped(false);
+							AbilityInfinitePierce.setId(0);
+						}
+					}
+						
+				}
+				
+				if((mx >= 560) && (mx <= 630)){
+					
+					if (AbilityOmniFireball.getBought()) {
+						if(!AbilityOmniFireball.isEquipped()) {
+							equipSelected = true;
+							tempAbility = AbilityOmniFireball;
+						}
+						else if (AbilityOmniFireball.isEquipped()){
+							AbilityOmniFireball.setEquipped(false);
+							AbilityOmniFireball.setId(0);
+						}
+					}
+						
+				}
+				
+				if((mx >= 740) && (mx <= 840)){
+					
+					if (AbilityInstaReload.getBought()) {
+						if(!AbilityInstaReload.isEquipped()) {
+							equipSelected = true;
+							tempAbility = AbilityInstaReload;
+						}
+						else if (AbilityInstaReload.isEquipped()){
+							AbilityInstaReload.setEquipped(false);
+							AbilityInstaReload.setId(0);
+						}
+					}
+						
+				}
+				
+				if((mx >= 920) && (mx <= 990)){
+					
+					if (AbilityShockwave.getBought()) {
+						if(!AbilityShockwave.isEquipped()) {
+							equipSelected = true;
+							tempAbility = AbilityShockwave;
+						}
+						else if (AbilityShockwave.isEquipped()){
+							AbilityShockwave.setEquipped(false);
+							AbilityShockwave.setId(0);
+						}
+					}
+						
+				}			
+		}
+						
 			
 			//row of ability buttons. Here, you assign the ability you equip to a number on your keyboard (1 2 or 3)
 			if ((my >= 570) && (my <= 610)) {
@@ -592,7 +708,7 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	public BufferedImage getSpriteSheet() {return spriteSheet;}
 	public Transaction getTransaction() {return trans;}
 	public Player getPlayer() {return p;}
-	
+	public Controller getController() {return c;}
 	
 	public int getDirection() {return direction;}
 	public void setDirection(int x) {direction = x;}
@@ -616,7 +732,13 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	
 	public boolean getReloadReady() {return reloadReady;}
 	public void setReloadReady(boolean reloadReady) {this.reloadReady = reloadReady;}
-		
+	
+	public int getReloadTime() {return reloadTime;}
+	public void setReloadTime(int x) {reloadTime = x;}
+	
+	public LinkedList<Foe> getFoes() {return Foes;}
+	public LinkedList<Friend> getFriends() {return Friends;}
+			
 	public int getModifierX() {return modifierX;}
 	public int getModifierY() {return modifierY;}
 	public void setModifierX( int x) {modifierX = x;}
@@ -629,26 +751,56 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	public void setFireballSpeedModifier(int x) {fireballSpeedModifier = x;}
 	
 	public int getPierce() {return pierce;}
-	public void setPierce(int x) {pierce = x;}
+	public void setPierce(int pierce) {this.pierce = pierce;}
 	
-	public ArrayList<Ability> getAbilities() {return Abilities;}
+	public boolean getOmniDirection() {return omniDirection;}
+	public void setOmniDirection(boolean hi) {omniDirection = hi;}
+	
+	public boolean getInstaReload() {return instaReload;}
+	public void setInstaReload(boolean hello) {instaReload = hello;}
+	
+	public boolean getShockwave() {return doShockwave;}
+	public void setShockwave(boolean goodDay) {doShockwave = goodDay;}
+	
+	//public ArrayList<Ability> getAbilities() {return Abilities;}
 		
 	public long getTickNumber() {return tickNumber;	}
 	
 	public Ability getAbilityONE() {return AbilityONE;}
 	public Ability getAbilityTWO() {return AbilityTWO;}
 	public Ability getAbilityTHREE() {return AbilityTHREE;}
-
-		
+	
+	public Heal getAbilityHeal() {return AbilityHeal;}
+	public Invincibility getAbilityInvincibility() {return AbilityInvincibility;}
+	public InfinitePierce getAbilityInfinitePierce() {return AbilityInfinitePierce;}
+	public OmniFireball getAbilityOmniFireball() {return AbilityOmniFireball;}
+	public InstaReload getAbilityInstaReload() {return AbilityInstaReload;}
+	public Shockwave getAbilityShockwave() {return AbilityShockwave;}
+			
 //Arggh i couldn't figure out how to get this to work in the controller...so i guess its now going into the main smh.
 	public void shootBullet() {
 		
 		if(reloadReady){
-		System.out.println("Pew Pew");
-		Friends.add(new Fireball(p.getX(), p.getY(), direction, this, c, tex));
-		
-			if (score >= 20) {
-				score -= 20;
+			if(!omniDirection) {
+				System.out.println("Pew Pew");
+				Friends.add(new Fireball(p.getX(), p.getY(), direction, this, c, tex));
+				if (score >= 20) {
+					score -= 20;
+				}
+			}
+			else {
+				System.out.println("Pew Pew!!");
+				direction = 1;
+				Friends.add(new Fireball(p.getX(), p.getY(), 1, this, c, tex));
+				direction = 2;
+				Friends.add(new Fireball(p.getX(), p.getY(), 2, this, c, tex));
+				direction = 3;
+				Friends.add(new Fireball(p.getX(), p.getY(), 3, this, c, tex));
+				direction = 4;
+				Friends.add(new Fireball(p.getX(), p.getY(), 4, this, c, tex));
+				if (score >= 80) {
+					score -= 80;
+				}
 			}
 			
 			reloadReady = false;

@@ -2,8 +2,11 @@ package com.game.scr.main;
 
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
+import java.util.LinkedList;
 
 import com.game.scr.main.Game.STATE;
+import com.game.scr.main.classes.Foe;
+import com.game.scr.main.classes.Friend;
 
 public class KeyInput extends KeyAdapter{
 
@@ -11,7 +14,7 @@ public class KeyInput extends KeyAdapter{
 	
 	public KeyInput(Game game) {
 		this.game = game;
-	
+		
 	}
 	
 	public void keyPressed(KeyEvent e) {
@@ -23,7 +26,7 @@ public class KeyInput extends KeyAdapter{
 					//if (!(p.getX() >= Game.WIDTH * Game.SCALE - 36 ))
 						game.setFireballSpeedModifier(2);
 						game.getPlayer().setVelX(4);
-						System.out.println("RIGHT Pressed");
+						//System.out.println("RIGHT Pressed");
 					
 					if (!(game.getDirection() == 2)) {
 						game.setDirection(2);
@@ -36,7 +39,7 @@ public class KeyInput extends KeyAdapter{
 					//if (!(p.getX() <= 0))
 						game.setFireballSpeedModifier(2);
 						game.getPlayer().setVelX(-4);
-						System.out.println("LEFT Pressed");
+						//System.out.println("LEFT Pressed");
 
 					if (!(game.getDirection() == 4)) {
 						game.setDirection(4);
@@ -49,7 +52,7 @@ public class KeyInput extends KeyAdapter{
 					//if (!(p.getY() >= Game.HEIGHT * Game.SCALE - 64))
 						game.setFireballSpeedModifier(2);
 						game.getPlayer().setVelY(4);
-						System.out.println("DOWN Pressed");
+						//System.out.println("DOWN Pressed");
 						
 					if (!(game.getDirection() == 3)) {
 						game.setDirection(3);
@@ -62,7 +65,7 @@ public class KeyInput extends KeyAdapter{
 				//	if (!(p.getY() <= 0))
 						game.setFireballSpeedModifier(2);
 						game.getPlayer().setVelY(-4);
-						System.out.println("UP Pressed");
+						//System.out.println("UP Pressed");
 					
 					if (!(game.getDirection() == 1)) {
 						game.setDirection(1);
@@ -73,7 +76,6 @@ public class KeyInput extends KeyAdapter{
 				}
 				
 				else if (key ==KeyEvent.VK_SPACE) {
-				game.pierce = game.getTransaction().getPierceLevel();
 				
 				game.shootBullet();
 		
@@ -125,28 +127,17 @@ public class KeyInput extends KeyAdapter{
 				}
 				
 			//abilities
-				else if (key ==KeyEvent.VK_1) {
-					//if (game.getAbilityONE().getReady()) {
-						game.AbilityONE.execute();
-						//game.getAbilityONE().setReady(false);
-					//}
-
-				}
-				
-				else if (key ==KeyEvent.VK_2) {
-					//if (game.getAbilityTWO().getReady()) {
-						game.AbilityTWO.execute();
-						//game.getAbilityTWO().setReady(false);
-					//}
-
-				}
-				
-				else if (key ==KeyEvent.VK_3) {
-					//if (game.getAbilityTHREE().getReady()) {
-						game.AbilityTHREE.execute();
-						//game.getAbilityTHREE().setReady(false);
-					//}
+				else if (key ==KeyEvent.VK_1 && !game.getGameOver()) {
+					game.AbilityONE.execute();
 					
+				}
+				
+				else if (key ==KeyEvent.VK_2 && !game.getGameOver()) {
+					game.AbilityTWO.execute();
+				}
+				
+				else if (key ==KeyEvent.VK_3 && !game.getGameOver()) {
+					game.AbilityTHREE.execute();
 				}
 				
 			//spawn in wave
@@ -160,6 +151,10 @@ public class KeyInput extends KeyAdapter{
 						game.showHitBox = false;
 					else
 						game.showHitBox = true;
+					
+				}
+			//random debbug key	
+				else if (key ==KeyEvent.VK_PERIOD) {	
 					
 				}
 			//pause
@@ -178,32 +173,33 @@ public class KeyInput extends KeyAdapter{
 		if(key == KeyEvent.VK_RIGHT) {
 			game.setFireballSpeedModifier(0);
 			game.getPlayer().setVelX(0);
-			System.out.println("D Released");
+			//System.out.println("D Released");
 			//rightPressed = false;
 
 		}
 		else if (key == KeyEvent.VK_LEFT) {
 			game.setFireballSpeedModifier(0);
 			game.getPlayer().setVelX(0);
-			System.out.println("A Released");
+			//System.out.println("A Released");
 			//leftPressed = false;
 
 		}
 		else if (key == KeyEvent.VK_DOWN) {
 			game.setFireballSpeedModifier(0);
 			game.getPlayer().setVelY(0);
-			System.out.println("S Released");
+			//System.out.println("S Released");
 			//downPressed = false;
 
 		}
 		else if (key == KeyEvent.VK_UP) {
 			game.setFireballSpeedModifier(0);
 			game.getPlayer().setVelY(0);
-			System.out.println("W Released");
+			//System.out.println("W Released");
 			//upPressed = false;
 
 		}
 		
 	}
+	
 	
 }

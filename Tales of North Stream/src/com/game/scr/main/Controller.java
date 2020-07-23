@@ -69,20 +69,20 @@ public class Controller {
 		}
 	}
 	
-	public void addFriend(Friend yeet) {
-		FriendList.add(yeet);
+	public void addFriend(Friend yeetnt) {
+		FriendList.add(yeetnt);
 	}
 	
-	public void removeFriend(Friend yeetnt) {
-		FriendList.remove(yeetnt);
+	public void removeFriend(Friend yeet) {
+		FriendList.remove(yeet);
 	}
 	
-	public void addFoe(Foe yeet) {
-		FoeList.add(yeet);
+	public void addFoe(Foe yeetnt) {
+		FoeList.add(yeetnt);
 	}
 	
-	public void removeFoe(Foe yeetnt) {
-		FoeList.remove(yeetnt);
+	public void removeFoe(Foe yeet) {
+		FoeList.remove(yeet);
 	}
 	
 	public LinkedList<Friend> getFriend(){
@@ -93,5 +93,7 @@ public class Controller {
 		return FoeList; 
 	}
 	
-		
+	public void speak() {
+		System.out.println("HIII");
+	}
 }

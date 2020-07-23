@@ -41,21 +41,18 @@ public class Fireball extends GameObject implements Friend{
 		speed = r.nextInt(2) + 3 + game.getFireballSpeedModifier() + game.getTransaction().getupgradeFireballSpdMod();
 		remainingPierce = game.getPierce();
 				
+		image = tex.getFireballTextures();
 		if(orientation == 1) {
-			image = tex.FireballUp;
 			directionScoreMultiplier = 1.2;
 			speed = -speed;
 		}
 		else if(orientation == 2) {
-			image = tex.FireballRight;
 			directionScoreMultiplier = 1.1;
 		}
 		else if(orientation == 3) {
-			image = tex.FireballDown;
 			directionScoreMultiplier = 1.2;
 		}
 		else if(orientation == 4) {
-			image = tex.FireballLeft;
 			directionScoreMultiplier = 1.5;
 			speed = -speed;
 		}
@@ -76,9 +73,9 @@ public class Fireball extends GameObject implements Friend{
 	
 	public void tick() {		
 		
-		if (game.Foes.size() > 0) {
+		if (game.getFoes().size() > 0) {
 			isTarget = true;
-			target = game.Foes.get(0);
+			target = game.getFoes().get(0);
 		}
 		else {
 			isTarget = false;
@@ -88,68 +85,25 @@ public class Fireball extends GameObject implements Friend{
 	
 		if (orientation == 1) {
 			y += speed;
-		/*
-			if (isTarget) {
-				if (target.getY() < y) {
-					if (target.getX() > x)
-					x += 1;
-					if (target.getX() < x)
-						x -= 1;
-				}
-			}
-			
-		*/
+	
 		}
 		
 		else if (orientation == 2) {
 			x += speed;
-		/*
-			if (isTarget) {
-				if (target.getX() > x) {
-					if (target.getY() > y)
-						y += 1;
-					if (target.getY() > y)
-						y -= 1;
-				}
-			}
-			
-		*/
+		
 		}
 			
 		else if (orientation == 3) {
 			y += speed;
-		/*
-			if (isTarget) {
-				if (target.getY() > y) {
-					if (target.getX() > x)
-					x += 1;
-					if (target.getX() < x)
-						x -= 1;
-				}
-			}
-			
-			*/
+		
 		}
 		
 		else if (orientation == 4) {
 			x += speed;
-
-			/*
-			if (isTarget) {
-				if (target.getX() < x) {
-					if (target.getY() > y)
-						y += 1;
-					if (target.getY() > y)
-						y -= 1;
-				}
-			}
-			
-			*/
-			
 		}
 	
-		for(int i = 0; i < game.Foes.size(); i++) {
-			Foe tempFoe = game.Foes.get(i);
+		for(int i = 0; i < game.getFoes().size(); i++) {
+			Foe tempFoe = game.getFoes().get(i);
 		
 			if(Physics.Collision(this, tempFoe)) {
 				game.setPointsGained((int)(100 * ((1 + game.round * .1 - .1) + (1 + tempFoe.getSpeedScoreMultiplier() * .25)) * directionScoreMultiplier));
@@ -164,16 +118,18 @@ public class Fireball extends GameObject implements Friend{
 			}	
 			
 		}
+		
+		if(x < -32 || y < -32 || x > game.WIDTH*game.SCALE + 32 || y > game.HEIGHT*game.SCALE + 32)
+			c.removeFriend(this);
 
 		
 	}
 	
 	public void render(Graphics g) {
 		g.drawImage(image, (int)x, (int)y, null);
-		if (game.getShowHitBox() == true) {
 		
+		if (game.getShowHitBox() == true) {
 			g.setColor(Color.green);
-			
 			if (orientation == 1)
 				g.drawRect((int)x + 6, (int)y, 22, 32);
 			if (orientation == 2)
@@ -182,7 +138,6 @@ public class Fireball extends GameObject implements Friend{
 				g.drawRect((int)x + 2, (int)y, 22, 32);
 			if (orientation == 4)
 				g.drawRect((int)x, (int)y + 2, 32, 22);
-
 		}
 	}
 

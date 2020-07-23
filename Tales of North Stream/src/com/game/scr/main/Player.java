@@ -15,7 +15,6 @@ public class Player extends GameObject implements Friend{
 	private Game game;
 	private Controller c;
 	
-	private int reloadTime = 300;
 
 	//constructor
 	public Player(double x, double y, Textures tex, Game game, Controller c) {
@@ -102,12 +101,5 @@ public class Player extends GameObject implements Friend{
 		this.velY = velY;
 	}
 	
-	public int getReloadTime() {
-		return reloadTime;
-	}
-	
-	public void setReloadTime(int x) {
-		reloadTime = x;
-	}
 	
 }

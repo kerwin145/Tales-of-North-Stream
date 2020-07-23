@@ -1,5 +1,6 @@
 package com.game.scr.main;
 
+import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class Invincibility extends Ability{
@@ -17,8 +18,11 @@ public class Invincibility extends Ability{
 	private long now = 0;
 	private long duration;
 	
-	public Invincibility(int id, String AbilityText, boolean equipped, int cost, Game game, long coolDownTime, long duration) {
-		super(id, AbilityText, equipped, cost, game, coolDownTime, duration);
+	int maxLevel;
+	int upgradeCost;
+	
+	public Invincibility(int id, String AbilityText, boolean equipped, int cost, Game game, long coolDownTime, long duration, int maxLevel, int upgradeCost) {
+		super(id, AbilityText, equipped, cost, game, coolDownTime, duration, maxLevel, upgradeCost);
 		this.coolDownTime = coolDownTime;
 		this.duration = duration;
 	}
@@ -29,6 +33,7 @@ public class Invincibility extends Ability{
 			lastUse = game.tickNumber;	
 			activeFor = 0;
 			timesUsed++;
+			ready = false;
 		}
 
 		System.out.println("READY: " + ready + ", Now: "+ now + ", lastUse :" + lastUse + " ,CoolDownTime: " + coolDownTime + "Duration: " + duration + "ActiveFor: " + activeFor);
@@ -54,6 +59,10 @@ public class Invincibility extends Ability{
 		}
 	}
 	
+	public void render(Graphics g) {
+		
+	}
+	
 	public void setReady(boolean ready) { this.ready = ready;}
 	public boolean getReady() {return ready;}
 	
@@ -62,6 +71,9 @@ public class Invincibility extends Ability{
 		now = currentTick;
 		activeFor = duration;
 	}
+	
+	public long getCoolDownTime() {return coolDownTime;}
+	public void setCoolDownTime(long x) {coolDownTime = x;}
 	
 	public String coolDown() {
 		if ((coolDownTime - (now - lastUse))/60 >= 0)
