@@ -2,8 +2,8 @@ package com.game.scr.main;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
-import java.awt.image.BufferedImage;
 
+import com.game.scr.main.classes.Boss;
 import com.game.scr.main.classes.Foe;
 import com.game.scr.main.classes.Friend;
 
@@ -56,6 +56,21 @@ public class Player extends GameObject implements Friend{
 			
 			if(Physics.Collision(this, tempFoe)) {
 				c.removeFoe(tempFoe);
+				Game.HEALTH -= game.damageRecieved;
+			}
+		}
+		
+		for(int i = 0; i <  game.Boss.size(); i++) {
+			Boss tempBoss = game.Boss.get(i);
+			
+			if(Physics.Collision(this, tempBoss)) {
+				tempBoss.takeDamage();
+				if (tempBoss.getHealth() == 0) {
+					c.removeBoss(tempBoss);
+					game.setScore(game.getScore() + 1000 * game.getRound() / 5);
+					game.setPointsGained(1000 * game.getRound() / 5);
+				}
+				
 				Game.HEALTH -= game.damageRecieved;
 			}
 		}

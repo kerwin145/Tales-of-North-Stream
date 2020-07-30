@@ -7,6 +7,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.util.Random;
 
+import com.game.scr.main.classes.Boss;
 import com.game.scr.main.classes.Foe;
 import com.game.scr.main.classes.Friend;
 
@@ -118,6 +119,26 @@ public class Fireball extends GameObject implements Friend{
 			}	
 			
 		}
+		
+		for(int i = 0; i <  game.Boss.size(); i++) {
+			Boss tempBoss = game.Boss.get(i);
+			
+			if(Physics.Collision(this, tempBoss)) {
+				tempBoss.takeDamage();
+				remainingPierce--;
+				if (remainingPierce == 0)
+					c.removeFriend(this);
+				
+				if (tempBoss.getHealth() == 0) {
+					c.removeBoss(tempBoss);
+					game.setScore(game.getScore() + 1000 * game.getRound() / 5);
+					game.setPointsGained(1000 * game.getRound() / 5);
+				}
+				
+			}
+		
+		}
+		
 		
 		if(x < -32 || y < -32 || x > game.WIDTH*game.SCALE + 32 || y > game.HEIGHT*game.SCALE + 32)
 			c.removeFriend(this);

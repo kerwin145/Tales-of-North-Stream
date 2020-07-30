@@ -141,9 +141,10 @@ public class KeyInput extends KeyAdapter{
 				}
 				
 			//spawn in wave
-				else if (key ==KeyEvent.VK_X) {
+				else if (key ==KeyEvent.VK_X && game.getBoss().size() == 0 ) {
 					System.out.println("Bad Guys, Watch Out");
-					game.startRound();
+					game.getSpawner().normalWave();
+					game.getSpawner().spawnBoss();
 				}
 			//show hit boxes	
 				else if (key ==KeyEvent.VK_B) {	

@@ -7,7 +7,8 @@ public class Textures {
 //	public BufferedImage[]Player = new BufferedImage[3];
 //	public BufferedImage[]GlorpNorp = new BufferedImage[3];
 	 BufferedImage GlorpNorp, Player, FireballUp, FireballRight, FireballDown, FireballLeft, NoAbilityIcon, HealIcon, InvincibilityIcon, InfinitePierceIcon,
-	 				FIREBALL_Up, FIREBALL_Right, FIREBALL_Down, FIREBALL_Left, OmniFireballIcon, InstaReloadIcon, ShockwaveIcon;
+	 				FIREBALL_Up, FIREBALL_Right, FIREBALL_Down, FIREBALL_Left, OmniFireballIcon, InstaReloadIcon, ShockwaveIcon,
+	 				Boss1;
 	
 	private SpriteSheet ss = null;
 	
@@ -42,6 +43,7 @@ public class Textures {
 		InstaReloadIcon = ss.grabImage(6, 4, 32, 32);
 		ShockwaveIcon = ss.grabImage(7, 4, 32, 32);
 		
+		Boss1 = ss.grabImage(1, 5, 32, 32);
 		
 	}
 	

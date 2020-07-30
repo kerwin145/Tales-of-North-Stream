@@ -3,17 +3,22 @@ package com.game.scr.main;
 import java.awt.Graphics;
 import java.util.LinkedList;
 import java.util.Random;
-import com.game.scr.main.classes.Friend;
+
+import com.game.scr.main.classes.Boss;
 import com.game.scr.main.classes.Foe;
+import com.game.scr.main.classes.Friend;
 
 
 public class Controller {
 
 	private LinkedList<Friend> FriendList = new LinkedList<Friend>();
 	private LinkedList<Foe> FoeList = new LinkedList<Foe>();
+	private LinkedList<Boss> BossList = new LinkedList<Boss>();
+
 
 	Friend friend;
 	Foe foe;
+	Boss boss;
 	
 	Random r = new Random();
 	
@@ -32,40 +37,41 @@ public class Controller {
 	public void tick() {
 		//Friend
 		for (int i = 0; i < FriendList.size(); i++) {
-			
 			friend = FriendList.get(i);
 			friend.tick(); 
 		}
 		
 		//Foe
 		for (int i = 0; i < FoeList.size(); i++) {
-
 			foe = FoeList.get(i);
 			foe.tick(); 
 		}
 		
-		/*
-			if((tempFireball.getX() < -10)||(tempFireball.getX() > Game.WIDTH * Game.SCALE - 25)
-					||(tempFireball.getY() < -5)||(tempFireball.getY() > Game.HEIGHT * Game.SCALE - 20))
-				removeFireball(tempFireball);
-			}
-		*/	
+		for (int i = 0; i < BossList.size(); i++) {
+			boss = BossList.get(i);
+			boss.tick();
+		}
 			
 	}//tick
 	
 	public void render(Graphics g) {
-		for (int i = 0; i < FriendList.size(); i++) {
-			
-			friend = FriendList.get(i);
-			friend.render(g); //NOT RECURSION
-			
-		}
 		
 		for (int i = 0; i < FoeList.size(); i++) {
 			
 			foe = FoeList.get(i);
-			foe.render(g); //NOT RECURSION
+			foe.render(g); 
 			
+		}
+		
+		for (int i = 0; i < FriendList.size(); i++) {
+			
+			friend = FriendList.get(i);
+			friend.render(g); 
+		}
+		
+		for(int i = 0; i < BossList.size(); i++) {
+			boss = BossList.get(i);
+			boss.render(g);
 		}
 	}
 	
@@ -85,6 +91,14 @@ public class Controller {
 		FoeList.remove(yeet);
 	}
 	
+	public void addBoss(Boss yeetnt) {
+		BossList.add(yeetnt);
+	}
+	
+	public void removeBoss(Boss yeet) {
+		BossList.remove(yeet);
+	}
+	
 	public LinkedList<Friend> getFriend(){
 		return FriendList; 
 	}
@@ -93,7 +107,8 @@ public class Controller {
 		return FoeList; 
 	}
 	
-	public void speak() {
-		System.out.println("HIII");
+	public LinkedList<Boss> getBoss(){
+		return BossList;
 	}
+	
 }

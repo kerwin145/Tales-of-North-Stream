@@ -11,12 +11,12 @@ import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
 import javax.swing.JFrame;
 
+import com.game.scr.main.classes.Boss;
 import com.game.scr.main.classes.Foe;
 import com.game.scr.main.classes.Friend;
 
@@ -45,16 +45,18 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	private Transaction trans;
 	private Random r = new Random();
 	private KeyInput key = new KeyInput(this);
+	private Spawner spawn;
 	
 	public LinkedList<Friend> Friends;
 	public LinkedList<Foe> Foes;
+	public LinkedList<Boss> Boss;
 	
 	static long AbilityHealCDT = 2 * 60; //CDT = cool down time 
-	static long AbilityInvincibilityCDT = 25 * 60, AbilityInvincibilityDuration = 5 * 60;
-	static long AbilityInfinitePiercCDT = 20 * 60, AbilityInfinitePierceDuration = 4 * 60;
-	static long AbilityOmniFireballCDT = 20 * 60, AbilityOmniFireballDuration = 3 * 60;
-	static long AbilityInstaReloadCDT = 18 * 60, AbilityInstaReloadDuration = 4 * 60;
-	static long AbilityShockwaveCDT = 25 * 60;
+	static long AbilityInvincibilityCDT = 2 * 60, AbilityInvincibilityDuration = 5 * 60; //25
+	static long AbilityInfinitePiercCDT = 2 * 60, AbilityInfinitePierceDuration = 4 * 60; //20
+	static long AbilityOmniFireballCDT = 2 * 60, AbilityOmniFireballDuration = 3 * 60; //20
+	static long AbilityInstaReloadCDT = 2 * 60, AbilityInstaReloadDuration = 4 * 60; //18
+	static long AbilityShockwaveCDT = 2 * 60; //25
 
 	private int reloadTime = 300;  //will be set after the player object has been created. 
 
@@ -116,7 +118,6 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	public static int round = 1;
 	private int score = 0;
 	private int highScore = 0;
-	private int numGlorpNorp;
 	private int galaxyBux = 10000000; 
 	
 	boolean help = false; //help screen
@@ -133,7 +134,7 @@ public class Game extends Canvas implements Runnable, MouseListener{
 		BufferedImageLoader loader = new BufferedImageLoader();
 		try {
 			
-			spriteSheet = loader.loadImage("/PlayerConcept3.png");
+			spriteSheet = loader.loadImage("/PlayerConcept4.png");
 			background = loader.loadImage("/Background.jpg");
 			
 		}catch(IOException e) {
@@ -150,11 +151,14 @@ public class Game extends Canvas implements Runnable, MouseListener{
 
 		Friends = c.getFriend();
 		Foes = c.getFoe();
+		Boss = c.getBoss();
+		
 		menu = new Menu(this);
 		igm = new InGameMenu(this);
 		iPanel = new InformationPanel(this);
 		um = new UpgradeMenu(this, p);
 		trans = new Transaction(this, p);
+		spawn = new Spawner(this, c);
 				
 		Ability0.setTexture(tex.NoAbilityIcon);
 		AbilityHeal.setTexture(tex.HealIcon);
@@ -265,23 +269,10 @@ public class Game extends Canvas implements Runnable, MouseListener{
 			if (score > highScore)
 				highScore = score;
 			
-			if ((Foes.size() == 0) && (!(round == 1)))
-				startRound();
-			/*
-			if(doShockwave) {	
-				for (int i = 0; i < Foes.size(); i++){
-					Foe tempEnemy =  Foes.get(i);
-					//formula is (rad ((x1-x2)squared + (y1 - y2)squared)
-					int distance = (int) Math.pow((Math.pow(p.getX()-tempEnemy.getX(), 2) + Math.pow(p.getY()-tempEnemy.getY(), 2)), 0.5);
-					int num = r.nextInt((int)Math.pow(distance, 0.5)/(4 + AbilityShockwave.getLevel()));
-					if(num == 0) //this is the chance 
-						 Foes.remove(tempEnemy);
-						//i know this will cuase the next enemy to be skipped, but that's intentional cuz i'm too lazy to make it not :)
-				}
-				doShockwave = false;
+			if ((Foes.size() == 0) && (!(round == 1)) && (Boss.size() == 0)) {
+				spawn.normalWave();
+				spawn.spawnBoss();
 			}
-			*/
-			
 		}
 		
 		if(State == STATE.UPGRADE) {
@@ -375,8 +366,9 @@ public class Game extends Canvas implements Runnable, MouseListener{
 				}
 				
 				//next round button
-				else if((mx >= Game.WIDTH*Game.SCALE - 170)&&(mx <= Game.WIDTH*Game.SCALE - 70)) {
-					startRound();
+				else if((mx >= Game.WIDTH*Game.SCALE - 170)&&(mx <= Game.WIDTH*Game.SCALE - 70) && Boss.size() == 0) {
+					spawn.normalWave();
+					spawn.spawnBoss();
 				}
 				
 				//show hitbox button
@@ -653,33 +645,7 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	
 //********************************************	END MOUSE LISTENER ********************************************//
 	
-	public void startRound() {
-		
-		if (round == 1) {
-			HEALTH = MAXHEALTH;
-			p.setX(200);
-			p.setY(200);
-			score = 0;
-			pointsGained = 0;
-			gameSummary = false;
-			GAMEOVER = false;
-			
-			AbilityONE.prepareCooldowns(tickNumber);
-			AbilityTWO.prepareCooldowns(tickNumber);
-			AbilityTHREE.prepareCooldowns(tickNumber);
-
-
-		}
-		
-		numGlorpNorp = r.nextInt(round * 2) + round;
-		
-		for (int i = 0; i < numGlorpNorp; i++) {
-			c.addFoe(new GlorpNorp(r.nextInt(200) + WIDTH * SCALE - 200, r.nextInt(HEIGHT * SCALE - 50) + 25, tex, c, this));
-		}
-		
-		round++;
-		
-	}
+	
 	
 	public static void main(String args[]) {
 		System.out.println("Working");
@@ -709,6 +675,8 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	public Transaction getTransaction() {return trans;}
 	public Player getPlayer() {return p;}
 	public Controller getController() {return c;}
+	public Textures getTex() {return tex;}
+	public Spawner getSpawner() {return spawn;}
 	
 	public int getDirection() {return direction;}
 	public void setDirection(int x) {direction = x;}
@@ -721,14 +689,18 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	public int getGalaxyBux() {return galaxyBux;}
 	public void setGalaxyBux(int bux) {galaxyBux = bux;}
 	
+	public int getRound() {return round;}
+	public void setRound(int round) {this.round = round;}
 	public int getPointsGained() {return pointsGained;}
 	public void setPointsGained(int pointsGained) {this.pointsGained = pointsGained;}
 
 	public boolean getShowHitBox() {return showHitBox;}
 	
 	public boolean getGameOver() {return GAMEOVER;}
+	public void setGameOver(boolean b) {GAMEOVER = b;}
 	
 	public boolean getGameSummary() {return gameSummary;}
+	public void setGameSummary(boolean b) {gameSummary = b;}
 	
 	public boolean getReloadReady() {return reloadReady;}
 	public void setReloadReady(boolean reloadReady) {this.reloadReady = reloadReady;}
@@ -738,6 +710,7 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	
 	public LinkedList<Foe> getFoes() {return Foes;}
 	public LinkedList<Friend> getFriends() {return Friends;}
+	public LinkedList<Boss> getBoss(){return Boss;}
 			
 	public int getModifierX() {return modifierX;}
 	public int getModifierY() {return modifierY;}

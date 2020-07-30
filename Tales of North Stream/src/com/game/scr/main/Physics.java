@@ -1,9 +1,7 @@
 package com.game.scr.main;
-import com.game.scr.main.classes.Friend;
-
-import java.util.LinkedList;
-
+import com.game.scr.main.classes.Boss;
 import com.game.scr.main.classes.Foe;
+import com.game.scr.main.classes.Friend;
 
 //whether we have collisions or not. 
 public class Physics {
@@ -28,5 +26,15 @@ public class Physics {
 		return false;
 		
 	}
+	
+	public static boolean Collision(Friend friend, Boss boss) {
+		
+		if (friend.getBounds().intersects(boss.getBounds())){
+			return true;
+		}
+	
+	return false;
+	
+}
 	
 }
