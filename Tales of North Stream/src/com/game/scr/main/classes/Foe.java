@@ -19,4 +19,5 @@ public interface Foe {
 	
 	public int getSpeedScoreMultiplier();
 	
+	public int getType();
 }

@@ -6,9 +6,11 @@ public class Textures {
 
 //	public BufferedImage[]Player = new BufferedImage[3];
 //	public BufferedImage[]GlorpNorp = new BufferedImage[3];
-	 BufferedImage GlorpNorp, Player, FireballUp, FireballRight, FireballDown, FireballLeft, NoAbilityIcon, HealIcon, InvincibilityIcon, InfinitePierceIcon,
-	 				FIREBALL_Up, FIREBALL_Right, FIREBALL_Down, FIREBALL_Left, OmniFireballIcon, InstaReloadIcon, ShockwaveIcon,
-	 				Boss1;
+	 BufferedImage  GlorpNorp, DudGlorpNorp, Player, 
+	 				FireballUp, FireballRight, FireballDown, FireballLeft, 
+	 				NoAbilityIcon, HealIcon, InvincibilityIcon, InfinitePierceIcon, OmniFireballIcon, InstaReloadIcon, ShockwaveIcon,
+	 				FIREBALL_Up, FIREBALL_Right, FIREBALL_Down, FIREBALL_Left, 
+	 				Boss1, Boss2, Boss2Bullet1, Boss2Bullet2;
 	
 	private SpriteSheet ss = null;
 	
@@ -25,7 +27,12 @@ public class Textures {
 	
 	private void getTextures() {
 		Player = ss.grabImage(1, 1, 32, 32);
+		
 		GlorpNorp = ss.grabImage(1, 3, 32, 32);
+		DudGlorpNorp = ss.grabImage(2, 3, 32, 32);
+		Boss2Bullet1 = ss.grabImage(3, 3, 32, 32);
+		Boss2Bullet2 = ss.grabImage(4, 3, 32, 32);
+		
 		FireballUp = ss.grabImage(1, 2, 32, 32);
 		FireballRight = ss.grabImage(2, 2, 32, 32);
 		FireballDown = ss.grabImage(3, 2, 32, 32);
@@ -44,6 +51,8 @@ public class Textures {
 		ShockwaveIcon = ss.grabImage(7, 4, 32, 32);
 		
 		Boss1 = ss.grabImage(1, 5, 32, 32);
+		Boss2 = ss.grabImage(2, 5, 32, 32);
+
 		
 	}
 	

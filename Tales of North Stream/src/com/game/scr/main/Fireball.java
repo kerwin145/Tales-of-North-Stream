@@ -107,12 +107,18 @@ public class Fireball extends GameObject implements Friend{
 			Foe tempFoe = game.getFoes().get(i);
 		
 			if(Physics.Collision(this, tempFoe)) {
-				game.setPointsGained((int)(100 * ((1 + game.round * .1 - .1) + (1 + tempFoe.getSpeedScoreMultiplier() * .25)) * directionScoreMultiplier));
 				c.removeFoe(tempFoe);
-				game.setScore((int) (game.getScore() + 100 * ((1 + game.round * .1 - .1) + (1 + speed * .25)) * directionScoreMultiplier));
-				//100 is the original
-				game.setGalaxyBux(game.getGalaxyBux() + 10 * (game.round/2));
-				//More galaxy bux for a milestone amount of enemies killed.
+				if (tempFoe.getType() == 1) { //if its a normal glorpnorp
+					game.setPointsGained((int)(100 * ((1 + game.round * .1 - .1) + (1 + tempFoe.getSpeedScoreMultiplier() * .25)) * directionScoreMultiplier));
+					game.setScore((int) (game.getScore() + 100 * ((1 + game.round * .1 - .1) + (1 + speed * .25)) * directionScoreMultiplier));
+					//100 is the original
+					game.setGalaxyBux(game.getGalaxyBux() + 10 * (game.round/2));
+					//More galaxy bux for a milestone amount of enemies killed.
+				}
+				else if (tempFoe.getType() == 2) { //if its a dud glorpnorp
+					game.setPointsGained(0);
+				}
+
 				remainingPierce--;
 				if (remainingPierce == 0)
 					c.removeFriend(this);

@@ -10,6 +10,8 @@ public class Spawner {
 	int numGlorpNorp;
 	Random r = new Random();
 	
+	int boss; //spawns in a type of boss depending on the number from the RNG
+	
 	public Spawner(Game game, Controller c) {
 		this.game = game;
 		this.c = c;
@@ -46,8 +48,12 @@ public class Spawner {
 	}
 	
 	public void spawnBoss() {
-		if(game.getRound() % 1 == 0) {
-			c.addBoss(new Boss1(r.nextInt(200) + game.WIDTH * game.SCALE - 200, r.nextInt(game.HEIGHT * game.SCALE - 200) + 100, game.getTex(), c, game));
+		if(game.getRound() % 5 == 0) {
+			boss = r.nextInt(2);
+			if (boss == 0)
+				c.addBoss(new Boss1(r.nextInt(200) + game.WIDTH * game.SCALE - 200, r.nextInt(game.HEIGHT * game.SCALE - 200) + 100, game.getTex(), c, game));
+			else if (boss == 1)
+				c.addBoss(new Boss2(game.WIDTH * game.SCALE - 100, r.nextInt(game.HEIGHT * game.SCALE - 200) + 100, game.getTex(), c, game));
 		}
 	}
 

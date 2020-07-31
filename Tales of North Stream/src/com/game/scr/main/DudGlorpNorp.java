@@ -9,7 +9,7 @@ import com.game.scr.main.classes.Foe;
 import com.game.scr.main.classes.Friend;
 
 
-public class GlorpNorp extends GameObject implements Foe {
+public class DudGlorpNorp extends GameObject implements Foe {
 
 	
 	private Textures tex; 
@@ -27,13 +27,13 @@ public class GlorpNorp extends GameObject implements Foe {
 	
 	int returnCount = 0; //number of times the space ship respawns
 	
-	public GlorpNorp(double x, double y, Textures tex, Controller c, Game game) {
+	public DudGlorpNorp(double x, double y, Textures tex, Controller c, Game game) {
 		super(x,y);
 		
 		this.tex = tex;
 		this.c = c;
 		this.game = game;
-		speed = r.nextInt(3+ (int)(game.round / 8)) + 1;
+		speed = r.nextInt(3+ (int)(game.round / 5)) + 1;
 		speedScoreMultiplier = speed; //this will not be changed. This way, score multiplier will only be based off of original speed. 
 		
 		if (game.round <= 10)
@@ -85,7 +85,7 @@ public class GlorpNorp extends GameObject implements Foe {
 	}//tick
 	
 	public void render(Graphics g) {
-		g.drawImage(tex.GlorpNorp, (int)x, (int)y, null);
+		g.drawImage(tex.DudGlorpNorp, (int)x, (int)y, null);
 		if (game.getShowHitBox() == true) {
 			g.setColor(Color.red);
 			g.drawRect((int)x, (int)y + 3, 26, 23);
@@ -122,8 +122,7 @@ public class GlorpNorp extends GameObject implements Foe {
 	}
 	
 	public int getType() {
-		return 1;
+		return 2;
 	}
-	
 	
 }

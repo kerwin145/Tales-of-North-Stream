@@ -262,6 +262,8 @@ public class Game extends Canvas implements Runnable, MouseListener{
 				
 				while(0 != Foes.size())
 					Foes.remove(0);
+				while(0 != Boss.size())
+					Boss.remove(0);
 				
 				GAMEOVER = true;
 			}
@@ -379,11 +381,13 @@ public class Game extends Canvas implements Runnable, MouseListener{
 						showHitBox = true;
 				}
 				
-				//restart button
+				//end game button
 				else if((mx >= Game.WIDTH*Game.SCALE - 360)&&(mx <= Game.WIDTH*Game.SCALE - 290)) {
 	
 					while(0 != Foes.size())
 						Foes.remove(0);
+					while(0 != Boss.size())
+						Boss.remove(0);
 					
 					round = 1;
 					gameSummary = true;

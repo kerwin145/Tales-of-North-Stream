@@ -6,9 +6,10 @@ import java.awt.Rectangle;
 import java.util.Random;
 
 import com.game.scr.main.classes.Boss;
+import com.game.scr.main.classes.Friend;
 
 
-//c.addFoe(new GlorpNorp(r.nextInt(200) + game.WIDTH * game.SCALE - 200, r.nextInt(game.HEIGHT * game.SCALE - 50) + 25, game.getTex(), c, game));
+//c.addFoe(new DudGlorpNorp(r.nextInt(200) + game.WIDTH * game.SCALE - 200, r.nextInt(game.HEIGHT * game.SCALE - 50) + 25, game.getTex(), c, game));
 
 /*
  * Boss1 (The mothership)
@@ -37,7 +38,9 @@ public class Boss1 extends GameObject implements Boss {
 	
 	int yVel = 0;
 	int xVel = 0;
+	int distance;
 	
+	boolean deathSpawn = true;
 //	int yDifference;
 //	int destination;
 	
@@ -72,7 +75,7 @@ public class Boss1 extends GameObject implements Boss {
 		this.tex = tex;
 		this.c = c;
 		this.game = game;
-		health = (int)(5 * (1 + game.getRound() / 50));
+		health = (int)(9 * (1 + game.getRound() / 25));
 		lastHealth = health;
 		maxHealth = health;
 		}
@@ -125,12 +128,7 @@ public class Boss1 extends GameObject implements Boss {
 			}
 		}
 */	
-		
-		
-	/*for both direction: If the boss has passed the spawning space of a glorpnorp, it will reverse direction. 
-	 * Otherwise, if it is in the middle, go right and left or dont do anything randomly until it has reached the border. 
-	 */
-	
+
 		if(x <= game.WIDTH*game.SCALE - 200) {xVel = 1;}
 		else if(x >= game.WIDTH*game.SCALE - 32) {xVel = -1;}
 		else {
@@ -162,18 +160,19 @@ public class Boss1 extends GameObject implements Boss {
 			x = r.nextInt(200) + game.WIDTH * game.SCALE - 200;
 			y = r.nextInt(game.HEIGHT * game.SCALE - 200) + 100;
 			lastAttacked = now;
-			c.addFoe(new GlorpNorp(r.nextInt(200) + x - 100, r.nextInt(200) + y - 100, game.getTex(), c, game));
+			c.addFoe(new DudGlorpNorp(r.nextInt(200) + x - 100, r.nextInt(200) + y - 100, game.getTex(), c, game));
 			lastHealth = health;
 			System.out.println("Ouch");
 		}
 		
 		//spawns ships upon one health and dies. More ships according to round. 
 		if (health == 1) {
-			System.out.println("I Died :(");
-			for(int i = 0; i < (int)(1 + game.getRound() / 5); i++) 
-				c.addFoe(new GlorpNorp(r.nextInt(200) + x - 100, r.nextInt(200) + y - 100, game.getTex(), c, game));
-			
-			c.removeBoss(this);
+			//System.out.println("I Died :(");
+			if(deathSpawn) {
+				for(int i = 0; i < (int)(1 + game.getRound() / 5); i++) 
+					c.addFoe(new DudGlorpNorp(r.nextInt(200) + x - 100, r.nextInt(200) + y - 100, game.getTex(), c, game));
+			}
+			deathSpawn = false;
 		}
 	
 		//if you have not attacked the boss
@@ -181,13 +180,33 @@ public class Boss1 extends GameObject implements Boss {
 			lastAttacked = now;
 			//the higher the round, the more you get penalized for being idle
 			for(int i = 0; i < (int)(1 + game.getRound() / 25); i++) 
-				c.addFoe(new GlorpNorp(r.nextInt(200) + x - 100, r.nextInt(200) + y - 100, game.getTex(), c, game));
+				c.addFoe(new DudGlorpNorp(r.nextInt(200) + x - 100, r.nextInt(200) + y - 100, game.getTex(), c, game));
 		}
 		
 		if (game.getFoes().size() == 0) {
 			for(int i = 0; i < (int)(1 + game.getRound() / 25); i++) 
-				c.addFoe(new GlorpNorp(r.nextInt(200) + x - 100, r.nextInt(200) + y - 100, game.getTex(), c, game));
+				c.addFoe(new DudGlorpNorp(r.nextInt(200) + x - 100, r.nextInt(200) + y - 100, game.getTex(), c, game));
 		}
+		
+		//dodge player
+		//formula is (rad ((x1-x2)squared + (y1 - y2)squared)
+		distance = (int) Math.pow((Math.pow(game.getPlayer().getX()-x, 2) + Math.pow(game.getPlayer().getY()-y, 2)), 0.5);
+		if (distance <= 100) {
+			x = r.nextInt(200) + game.WIDTH * game.SCALE - 200;
+			y = r.nextInt(game.HEIGHT * game.SCALE - 200) + 100;
+		}
+		
+	/* Dodges fireballs lol
+		for(int i = 0; i < game.getFriends().size(); i++) {
+			Friend tempFriend = game.getFriends().get(i);
+			distance = (int) Math.pow((Math.pow(tempFriend.getX()-x, 2) + Math.pow(tempFriend.getY()-y, 2)), 0.5);
+			if (distance <= 100) {
+				x = r.nextInt(200) + game.WIDTH * game.SCALE - 200;
+				y = r.nextInt(game.HEIGHT * game.SCALE - 200) + 100;
+			}
+		}
+	*/
+		
 		//debug
 		//if(now % 60 == 0) {
 		//	System.out.println("Time: now = " + now + " animationStart = " + animationStart + " moveTime = " + moveTime + " pauseTIme = " + pauseTime + " totalMoveTime = " + totalMoveTime + "Direcition = "  + direction);
@@ -246,7 +265,7 @@ public class Boss1 extends GameObject implements Boss {
 	public int getHealth() {
 		return health;
 	}
-	
+/*	
 	private int section() {
 		if (y >= 0|| y < game.HEIGHT*game.SCALE / 3)
 			return 1;
@@ -255,5 +274,5 @@ public class Boss1 extends GameObject implements Boss {
 		else
 			return 3;
 	}
-
+*/
 }
