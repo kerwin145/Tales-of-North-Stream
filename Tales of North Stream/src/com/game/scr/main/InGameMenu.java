@@ -31,7 +31,15 @@ public class InGameMenu {
 		g2d.draw(restartButton);
 		
 		g.drawString("MENU", pauseButton.x + 2, pauseButton.y + 10);
+		
+		if (game.getRound() % 5 == 4)
+			g.setColor(Color.orange);
+		else
+			g.setColor(Color.white);
+		
 		g.drawString("START ROUND" + game.round, nextRoundButton.x + 2, nextRoundButton.y + 10);
+		
+		g.setColor(Color.white);
 		g.drawString("SHOW HIT BOXES", showHitBox.x + 2, showHitBox.y + 10);
 		g.drawString("END GAME", restartButton.x + 2, restartButton.y + 10);
 
