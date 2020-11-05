@@ -33,7 +33,7 @@ public class GlorpNorp extends GameObject implements Foe {
 		this.tex = tex;
 		this.c = c;
 		this.game = game;
-		speed = r.nextInt(3+ (int)(game.round / 8)) + 1;
+		speed = r.nextInt(3+ (int)(game.round / 20 + Math.pow(game.round, .3))) + 1;
 		speedScoreMultiplier = speed; //this will not be changed. This way, score multiplier will only be based off of original speed. 
 		
 		if (game.round <= 10)

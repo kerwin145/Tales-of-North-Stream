@@ -24,6 +24,7 @@ This is a boss that spawns ally glorpnorps as it loses health.
 		 These glorpnrops will not give points or bbucks , so you can't use it as farming
 		 To do this, perhaps I have to create some sort of identifer. 
 		 If this is the only character on screen, it will spawn glorpnorps at double the rate. 
+		 
 */
 
 public class Boss1 extends GameObject implements Boss {
@@ -50,6 +51,7 @@ public class Boss1 extends GameObject implements Boss {
 	int health;
 	int lastHealth;
 	int maxHealth;
+	int spawnRadius = 100;
 	
 	long now;
 	long animationStart_x;
@@ -71,11 +73,13 @@ public class Boss1 extends GameObject implements Boss {
 	
 	public Boss1(double x, double y, Textures tex, Controller c, Game game) {
 		super(x,y);
-		
+		//This is the code for spawning a dudglorpnorp. The random allows for the spawning of spawnradius around the boss. +13 and +11 centers the glorpnorp. 
+		//c.addFoe(new DudGlorpNorp(r.nextInt(spawnRadius * 2) - spawnRadius + x + 13, r.nextInt(spawnRadius * 2) - spawnRadius + y + 11, game.getTex(), c, game)); 
+
 		this.tex = tex;
 		this.c = c;
 		this.game = game;
-		health = (int)(9 * (1 + game.getRound() / 25));
+		health = (int)(8 * (1 + game.getRound() / 25));
 		lastHealth = health;
 		maxHealth = health;
 		}
@@ -103,31 +107,6 @@ public class Boss1 extends GameObject implements Boss {
 			moveFinished_y = false;
 		}
 	
-		
-		
-	//the boss will try to avoid the player
-/*
-		yDifference = (int)(game.getPlayer().getY() - y);
-		//if positive, then player is above. if negative, then player is under
-			
-		if(Math.abs(yDifference) > game.HEIGHT * game.SCALE / 2)//if difference in y is greater than half the height of the board
-			yVel = 0;
-		else {
-			if (section() == 1 && (y > game.HEIGHT*game.SCALE + 160 && y < game.HEIGHT*game.SCALE - 160)) {
-				yVel = 1;
-			}
-			if (section() == 2 && (y > game.HEIGHT*game.SCALE + 160 && y < game.HEIGHT*game.SCALE - 160)) {
-				int upOrDown = r.nextInt(2);
-				if(upOrDown == 0)
-					yVel = 1;
-				else 
-					yVel = -1;
-			}
-			if (section() == 3 && (y > game.HEIGHT*game.SCALE + 160 && y < game.HEIGHT*game.SCALE - 160)) {
-				yVel = -1;
-			}
-		}
-*/	
 
 		if(x <= game.WIDTH*game.SCALE - 200) {xVel = 1;}
 		else if(x >= game.WIDTH*game.SCALE - 32) {xVel = -1;}
@@ -138,7 +117,6 @@ public class Boss1 extends GameObject implements Boss {
 			}
 			else {xVel = 0;}
 		}
-		
 		if(y <= 120) {yVel = 1;}
 		else if(y >= game.HEIGHT*game.SCALE - 120) {yVel = -1;}
 		else {
@@ -157,10 +135,12 @@ public class Boss1 extends GameObject implements Boss {
 
 		//spawns in glorpnorp and teleports away if lost health
 		if (health < lastHealth) {	
+			//teleport away
 			x = r.nextInt(200) + game.WIDTH * game.SCALE - 200;
 			y = r.nextInt(game.HEIGHT * game.SCALE - 200) + 100;
 			lastAttacked = now;
-			c.addFoe(new DudGlorpNorp(r.nextInt(200) + x - 100, r.nextInt(200) + y - 100, game.getTex(), c, game));
+			
+			c.addFoe(new DudGlorpNorp(r.nextInt(spawnRadius * 2) - spawnRadius + x + 13, r.nextInt(spawnRadius * 2) - spawnRadius + y + 11, game.getTex(), c, game)); 
 			lastHealth = health;
 			System.out.println("Ouch");
 		}
@@ -170,8 +150,7 @@ public class Boss1 extends GameObject implements Boss {
 			//System.out.println("I Died :(");
 			if(deathSpawn) {
 				for(int i = 0; i < (int)(1 + game.getRound() / 5); i++) 
-					c.addFoe(new DudGlorpNorp(r.nextInt(200) + x - 100, r.nextInt(200) + y - 100, game.getTex(), c, game));
-			}
+					c.addFoe(new DudGlorpNorp(r.nextInt(spawnRadius * 2) - spawnRadius + x + 13, r.nextInt(spawnRadius * 2) - spawnRadius + y + 11, game.getTex(), c, game));			}
 			deathSpawn = false;
 		}
 	
@@ -180,13 +159,11 @@ public class Boss1 extends GameObject implements Boss {
 			lastAttacked = now;
 			//the higher the round, the more you get penalized for being idle
 			for(int i = 0; i < (int)(1 + game.getRound() / 25); i++) 
-				c.addFoe(new DudGlorpNorp(r.nextInt(200) + x - 100, r.nextInt(200) + y - 100, game.getTex(), c, game));
-		}
+				c.addFoe(new DudGlorpNorp(r.nextInt(spawnRadius * 2) - spawnRadius + x + 13, r.nextInt(spawnRadius * 2) - spawnRadius + y + 11, game.getTex(), c, game));		}
 		
 		if (game.getFoes().size() == 0) {
 			for(int i = 0; i < (int)(1 + game.getRound() / 25); i++) 
-				c.addFoe(new DudGlorpNorp(r.nextInt(200) + x - 100, r.nextInt(200) + y - 100, game.getTex(), c, game));
-		}
+				c.addFoe(new DudGlorpNorp(r.nextInt(spawnRadius * 2) - spawnRadius + x + 13, r.nextInt(spawnRadius * 2) - spawnRadius + y + 11, game.getTex(), c, game));		}
 		
 		//dodge player
 		//formula is (rad ((x1-x2)squared + (y1 - y2)squared)
@@ -221,7 +198,7 @@ public class Boss1 extends GameObject implements Boss {
 		g.setColor(Color.yellow);
 		g.fillRect((int)x, (int)y - 10, health * 5, 5);
 		
-		g.drawOval((int)x - 100, (int)y - 100, 200, 200);
+		g.drawOval((int)x - 100 + width/2, (int)y - 100 + height/2, 200, 200);
 	
 		
 		if (game.getShowHitBox() == true) {

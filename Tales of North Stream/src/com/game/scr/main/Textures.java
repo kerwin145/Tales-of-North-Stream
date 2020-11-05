@@ -4,13 +4,12 @@ import java.awt.image.BufferedImage;
 
 public class Textures {
 
-//	public BufferedImage[]Player = new BufferedImage[3];
-//	public BufferedImage[]GlorpNorp = new BufferedImage[3];
+	
 	 BufferedImage  GlorpNorp, DudGlorpNorp, Player, 
 	 				FireballUp, FireballRight, FireballDown, FireballLeft, 
 	 				NoAbilityIcon, HealIcon, InvincibilityIcon, InfinitePierceIcon, OmniFireballIcon, InstaReloadIcon, ShockwaveIcon,
 	 				FIREBALL_Up, FIREBALL_Right, FIREBALL_Down, FIREBALL_Left, 
-	 				Boss1, Boss2, Boss2Bullet1, Boss2Bullet2;
+	 				Boss1, Boss2, Boss2Bullet1, Boss2Bullet2, Boss3; //the bullets are not bosses, they are part of the Foe Linkedlist. 
 	
 	private SpriteSheet ss = null;
 	
@@ -52,6 +51,7 @@ public class Textures {
 		
 		Boss1 = ss.grabImage(1, 5, 32, 32);
 		Boss2 = ss.grabImage(2, 5, 32, 32);
+		Boss3 = ss.grabImage(3, 5, 32, 32);
 
 		
 	}

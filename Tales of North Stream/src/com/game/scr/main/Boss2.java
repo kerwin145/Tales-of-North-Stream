@@ -111,7 +111,7 @@ public class Boss2 extends GameObject implements Boss {
 				reloadCoolDown = reloadTime;
 			//shooting the smaller bullets. These will make a v formation	
 				bulletCount++;
-				if (bulletCount % 4 == 0){
+				if (bulletCount % 2 == 0){
 					numSmallBullet = (int)(2 * (1 + game.getRound()/5));
 					num = (int) (y + ((1 + game.getRound()/5) * 20)); 
 

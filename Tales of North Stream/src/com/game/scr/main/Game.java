@@ -51,12 +51,12 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	public LinkedList<Foe> Foes;
 	public LinkedList<Boss> Boss;
 	
-	static long AbilityHealCDT = 2 * 60; //CDT = cool down time 
-	static long AbilityInvincibilityCDT = 2 * 60, AbilityInvincibilityDuration = 5 * 60; //25
-	static long AbilityInfinitePiercCDT = 2 * 60, AbilityInfinitePierceDuration = 4 * 60; //20
-	static long AbilityOmniFireballCDT = 2 * 60, AbilityOmniFireballDuration = 3 * 60; //20
-	static long AbilityInstaReloadCDT = 2 * 60, AbilityInstaReloadDuration = 4 * 60; //18
-	static long AbilityShockwaveCDT = 2 * 60; //25
+	static long AbilityHealCDT = 2 * 60; //CDT == cool down time 
+	static long AbilityInvincibilityCDT = 25 * 60, AbilityInvincibilityDuration = 5 * 60; //25
+	static long AbilityInfinitePiercCDT = 20 * 60, AbilityInfinitePierceDuration = 4 * 60; //20
+	static long AbilityOmniFireballCDT = 20 * 60, AbilityOmniFireballDuration = 3 * 60; //20
+	static long AbilityInstaReloadCDT = 18 * 60, AbilityInstaReloadDuration = 4 * 60; //18
+	static long AbilityShockwaveCDT = 25 * 60; //25
 
 	private int reloadTime = 300;  //will be set after the player object has been created. 
 
@@ -118,7 +118,7 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	public static int round = 1;
 	private int score = 0;
 	private int highScore = 0;
-	private int galaxyBux = 10000000; 
+	private int galaxyBux = 0; 
 	
 	boolean help = false; //help screen
 	boolean gameSummary = false; //arghh y cant i use graphics in mouse listener

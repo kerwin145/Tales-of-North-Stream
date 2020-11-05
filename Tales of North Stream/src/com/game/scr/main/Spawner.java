@@ -31,8 +31,7 @@ public class Spawner {
 				game.getAbilityONE().prepareCooldowns(game.tickNumber);
 				game.getAbilityTWO().prepareCooldowns(game.tickNumber);
 				game.getAbilityTHREE().prepareCooldowns(game.tickNumber);
-
-
+				
 			}
 			
 			numGlorpNorp = r.nextInt(game.getRound() * 2) + game.getRound();
@@ -49,12 +48,20 @@ public class Spawner {
 	
 	public void spawnBoss() {
 		if(game.getRound() % 5 == 0) {
-			boss = r.nextInt(2);
-			if (boss == 0)
+		boss = r.nextInt(3);	
+		if (boss == 0)
 				c.addBoss(new Boss1(r.nextInt(200) + game.WIDTH * game.SCALE - 200, r.nextInt(game.HEIGHT * game.SCALE - 200) + 100, game.getTex(), c, game));
-			else if (boss == 1)
-				c.addBoss(new Boss2(game.WIDTH * game.SCALE - 100, r.nextInt(game.HEIGHT * game.SCALE - 200) + 100, game.getTex(), c, game));
+		else if (boss == 1)
+			c.addBoss(new Boss2(game.WIDTH * game.SCALE - 100, r.nextInt(game.HEIGHT * game.SCALE - 200) + 100, game.getTex(), c, game));
+		else {
+			for (int i = 0; i < 3 + (int)(game.getRound() / 16); i++)
+				c.addBoss(new Boss3(r.nextInt(200) + game.WIDTH * game.SCALE - 200, 200 + (i * 64), game.getTex(), c, game, (int)(i)));
 		}
-	}
+		
+		//	c.addBoss(new Boss2(game.WIDTH * game.SCALE - 100, r.nextInt(game.HEIGHT * game.SCALE - 200) + 100, game.getTex(), c, game));
+
+		}
+	}//end spawn boss
+	
 
 }

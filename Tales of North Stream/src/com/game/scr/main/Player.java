@@ -65,17 +65,30 @@ public class Player extends GameObject implements Friend{
 			
 			if(Physics.Collision(this, tempBoss)) {
 				tempBoss.takeDamage();
+				
 				if (tempBoss.getHealth() == 0) {
-					c.removeBoss(tempBoss);
-					game.setScore(game.getScore() + 1000 * game.getRound() / 5);
-					game.setPointsGained(1000 * game.getRound() / 5);
-				}
+					System.out.println("size of game Foes:" + game.getFoes().size());
+					for(int j = 0; j < game.getFoes().size(); j++) {
+						Foe tempFoe = game.getFoes().get(j);
+									
+						if (tempFoe.getType() == 2) {
+							c.removeFoe(tempFoe);
+							j--; //to make sure the index is correct
+						}
+					}
+				c.removeBoss(tempBoss);
+		
+					game.setScore(game.getScore() + 1500 * game.getRound() / 5);
+					game.setPointsGained(1500 * game.getRound() / 5);
+				}//end if tempboss health == 0.
+				
 				
 				Game.HEALTH -= game.damageRecieved;
-			}
+		
+			}	
 		}
 		
-	}
+	}//end tick
 	
 	public void render(Graphics g) {
 		//setting boundary constraints

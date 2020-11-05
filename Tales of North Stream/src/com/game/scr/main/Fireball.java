@@ -123,7 +123,7 @@ public class Fireball extends GameObject implements Friend{
 				if (remainingPierce == 0)
 					c.removeFriend(this);
 			}	
-			
+		
 		}
 		
 		for(int i = 0; i <  game.Boss.size(); i++) {
@@ -132,14 +132,25 @@ public class Fireball extends GameObject implements Friend{
 			if(Physics.Collision(this, tempBoss)) {
 				tempBoss.takeDamage();
 				remainingPierce--;
-				if (remainingPierce == 0)
-					c.removeFriend(this);
 				
 				if (tempBoss.getHealth() == 0) {
-					c.removeBoss(tempBoss);
-					game.setScore(game.getScore() + 1000 * game.getRound() / 5);
-					game.setPointsGained(1000 * game.getRound() / 5);
-				}
+					System.out.println("size of game Foes:" + game.getFoes().size());
+					for(int j = 0; j < game.getFoes().size(); j++) {
+						Foe tempFoe = game.getFoes().get(j);
+									
+						if (tempFoe.getType() == 2) {
+							c.removeFoe(tempFoe);
+							j--; //to make sure the index is correct
+						}
+					}
+				c.removeBoss(tempBoss);
+		
+					game.setScore(game.getScore() + 1500 * game.getRound() / 5);
+					game.setPointsGained(1500 * game.getRound() / 5);
+				}//end if tempboss health == 0.
+				
+				if (remainingPierce == 0)
+					c.removeFriend(this);
 				
 			}
 		

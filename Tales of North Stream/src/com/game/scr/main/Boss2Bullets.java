@@ -69,9 +69,9 @@ public class Boss2Bullets extends GameObject implements Foe {
 			}
 		}
 		
-		x -= xVel;
+			x -= xVel;
 
-		if (x >= game.getPlayer().getX() && bulletType == 1)
+		if (x >= game.getPlayer().getX() && bulletType == 1) //if bullet is in front of player.
 			y += yVel;
 
 		
