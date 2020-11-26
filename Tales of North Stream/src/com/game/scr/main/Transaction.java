@@ -19,7 +19,7 @@ public class Transaction {
 	
 	int reloadLevel = 1;
 	int maxReloadLevel = 7;
-	int reloadCost = (int)(Math.pow((double)fireballLevel + 2, 2) * 1200);
+	int reloadCost = (int)(Math.pow((double)reloadLevel + 2, 2) * 1200);
 	
 	int pierceLevel = 1;
 	int maxPierceLevel = 4;
@@ -118,7 +118,7 @@ public class Transaction {
 			game.getAbilityInfinitePierce().setCoolDownTime(game.getAbilityInfinitePierce().getCoolDownTime() - 120);
 			game.getAbilityInfinitePierce().setDuration(game.getAbilityInfinitePierce().getDuration() + 60);
 			game.getAbilityInfinitePierce().setLevel(game.getAbilityInfinitePierce().getLevel() + 1);
-			game.getAbilityInfinitePierce().setUpgradeCost((int)(game.getAbilityInfinitePierce().getUpgradeCost() + 4000 + (.2)*Math.pow(game.getAbilityInvincibility().getUpgradeCost(), 1.25) ));
+			game.getAbilityInfinitePierce().setUpgradeCost((int)(game.getAbilityInfinitePierce().getUpgradeCost() + 4000 + (.2)*Math.pow(game.getAbilityInvincibility().getUpgradeCost(), 1.2) ));
 		}
 	}
 	
@@ -127,7 +127,7 @@ public class Transaction {
 			game.setGalaxyBux(game.getGalaxyBux() - game.getAbilityOmniFireball().getUpgradeCost());
 			game.getAbilityOmniFireball().setDuration(game.getAbilityOmniFireball().getDuration() + 60);
 			game.getAbilityOmniFireball().setLevel(game.getAbilityOmniFireball().getLevel() + 1);
-			game.getAbilityOmniFireball().setUpgradeCost((int)(game.getAbilityOmniFireball().getUpgradeCost() + 10000 + (.2)*Math.pow(game.getAbilityInvincibility().getUpgradeCost(), 1.2) ));
+			game.getAbilityOmniFireball().setUpgradeCost((int)(game.getAbilityOmniFireball().getUpgradeCost() + 10000 + (.2)*Math.pow(game.getAbilityOmniFireball().getUpgradeCost(), 1.2) ));
 		}
 	}
 	
