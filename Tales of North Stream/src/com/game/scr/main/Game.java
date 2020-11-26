@@ -118,7 +118,7 @@ public class Game extends Canvas implements Runnable, MouseListener{
 	public static int round = 1;
 	private int score = 0;
 	private int highScore = 0;
-	private int galaxyBux = 0; 
+	private int galaxyBux = 10000000; 
 	
 	boolean help = false; //help screen
 	boolean gameSummary = false; //arghh y cant i use graphics in mouse listener
@@ -590,9 +590,11 @@ public class Game extends Canvas implements Runnable, MouseListener{
 					if((equipSelected)&&(!AbilityONE.isEquipped())){ //if you clicked the equip button, and the ability is not equipped
 						tempAbility.setEquipped(true);
 						AbilityONE = tempAbility;
+						AbilityONE.setId(1);
 					}
 					else {
 						AbilityONE.setEquipped(false);
+						AbilityONE.setId(0);
 						AbilityONE = Ability0;
 					}
 					
@@ -605,9 +607,11 @@ public class Game extends Canvas implements Runnable, MouseListener{
 					if((equipSelected)&&(!AbilityTWO.isEquipped())){ //if you clicked the equip button, and the ability is not equipped
 						tempAbility.setEquipped(true);
 						AbilityTWO = tempAbility;
+						AbilityTWO.setId(2);
 					}
 					else {
 						AbilityTWO.setEquipped(false);
+						AbilityTWO.setId(0);
 						AbilityTWO = Ability0;
 					}
 					System.out.println("Aility equipped in slot two is " + AbilityTWO.isEquipped()); //Debug
@@ -619,9 +623,11 @@ public class Game extends Canvas implements Runnable, MouseListener{
 					if((equipSelected)&&(!AbilityTHREE.isEquipped())){ //if you clicked the equip button, and the ability is not equipped
 						tempAbility.setEquipped(true);
 						AbilityTHREE = tempAbility;
+						AbilityTHREE.setId(3);
 					}
 					else {
 						AbilityTHREE.setEquipped(false);
+						AbilityTHREE.setId(0);
 						AbilityTHREE = Ability0;
 					}
 					
